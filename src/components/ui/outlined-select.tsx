@@ -16,7 +16,7 @@ function TriangleIcon({ className }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M14 11L18.5 17H9.5L14 11Z" fill="currentColor" />
+      <path d="M14 10.5L20.125 17.5H7.875L14 10.5Z" fill="currentColor" />
     </svg>
   );
 }
@@ -64,7 +64,7 @@ function OutlinedSelect({
       >
         <SelectPrimitive.Trigger
           className={cn(
-            'border-bw2 pl-g4 rounded-br2 relative flex h-[50px] w-full cursor-pointer items-center bg-white pr-[50px] transition-all outline-none',
+            'pl-g4 rounded-br2 relative flex h-[50px] w-full cursor-pointer items-center border-[1.5px] bg-white pr-[50px] transition-all outline-none',
             // Border colors
             error
               ? 'border-error border'
@@ -82,7 +82,7 @@ function OutlinedSelect({
           {/* Dropdown Button with Divider */}
           <div
             className={cn(
-              'border-l-bw2 rounded-tr-br2 rounded-br-br2 absolute top-0 right-0 bottom-0 flex w-[50px] items-center justify-center bg-white',
+              'rounded-tr-br2 rounded-br-br2 absolute top-0 right-0 bottom-0 flex w-[50px] items-center justify-center border-l-[1.5px] bg-white',
               error
                 ? 'border-error'
                 : open || hasValue
@@ -112,7 +112,7 @@ function OutlinedSelect({
                   'text-[13px] leading-[18px] font-normal tracking-[-0.32px]',
                   error ? 'text-error' : 'text-primary-green',
                 ]
-              : ['top-1/2 left-[16px] -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
+              : ['left-g4 top-1/2 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
           )}
         >
           {label}

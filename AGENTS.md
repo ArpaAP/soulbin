@@ -64,15 +64,15 @@ Design tokens are defined in `src/app/globals.css` using `@theme inline` and mir
 
 - **Typography**: `text-h1` ~ `text-h6`, `text-b1` ~ `text-b3`, `text-l1`, `text-l2`, `text-c1`, `text-c2`
 - **Spacing**: `g0` ~ `g8` (0px, 4px, 8px, 12px, 16px, 20px, 24px, 28px, 32px)
-- **Border Width**: `bw1` (1px), `bw2` (1.5px), `bw3` (2px)
 - **Border Radius**: `br1` ~ `br4` (4px, 8px, 12px, 16px)
 - **Colors**: `primary-green`, `white`, `black`, `error`, `gray-border`, `gray-text`
 
 ### Critical Tailwind v4 Usage Rules
 
 1. **DO NOT use `var()` syntax**: `py-g0` ✅ / `py-[var(--spacing-g0)]` ❌
-2. **Border requires thickness**: `border-[1.5px] border-gray-border` ✅ / `border-gray-border` ❌
-3. **No tailwind.config.ts**: Use `@theme inline` in globals.css instead
+2. **Border Width - Use Arbitrary Values**: For border widths defined in Figma (1px, 1.5px, 2px, etc.), use arbitrary values like `border-[1.5px]` or `border-b-[1.5px]` directly. ❌ Do NOT use custom utilities like `border-bw2` (Tailwind v4 does not support the `--border-width-*` namespace)
+3. **Border requires thickness**: `border-[1.5px] border-gray-border` ✅ / `border-gray-border` ❌
+4. **No tailwind.config.ts**: Use `@theme inline` in globals.css instead
 
 ## Project Structure
 

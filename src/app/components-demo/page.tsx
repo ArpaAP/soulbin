@@ -5,16 +5,20 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { LinedSelect, LinedSelectItem } from '@/components/ui/lined-select';
 import { OutlinedSelect, OutlinedSelectItem } from '@/components/ui/outlined-select';
 
 export default function ComponentsDemoPage() {
   const [selectValue1, setSelectValue1] = useState('');
   const [selectValue2, setSelectValue2] = useState('option1');
   const [selectValue3, setSelectValue3] = useState('');
+  const [selectValue4, setSelectValue4] = useState('');
+  const [selectValue5, setSelectValue5] = useState('option1');
+  const [selectValue6, setSelectValue6] = useState('');
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-8 font-sans">
-      <main className="flex w-full max-w-5xl flex-col gap-12">
+      <main className="flex w-full max-w-5xl flex-col gap-24 pb-48">
         <div className="flex flex-col gap-4">
           <h1 className="text-h3">Button Component Test</h1>
           <p className="text-b1 text-zinc-600">피그마 디자인 시스템에 맞춰 구현된 버튼 컴포넌트</p>
@@ -140,6 +144,54 @@ export default function ComponentsDemoPage() {
                 <OutlinedSelectItem value="option3">Menu Element</OutlinedSelectItem>
                 <OutlinedSelectItem value="option4">Menu Element</OutlinedSelectItem>
               </OutlinedSelect>
+            </div>
+          </div>
+        </section>
+
+        {/* Lined Select Component */}
+        <section className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-h3">Lined Select Component Test</h1>
+            <p className="text-b1 text-zinc-600">
+              하단 Border만 있는 Lined 스타일의 드롭다운 컴포넌트
+            </p>
+          </div>
+
+          {/* Basic Lined Select */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Basic Lined Select</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LinedSelect label="Label" value={selectValue4} onValueChange={setSelectValue4}>
+                <LinedSelectItem value="option1">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option2">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option3">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option4">Menu Element</LinedSelectItem>
+              </LinedSelect>
+
+              <LinedSelect label="Label" value={selectValue5} onValueChange={setSelectValue5}>
+                <LinedSelectItem value="option1">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option2">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option3">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option4">Menu Element</LinedSelectItem>
+              </LinedSelect>
+            </div>
+          </div>
+
+          {/* Error State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Error State</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LinedSelect
+                label="Label"
+                value={selectValue6}
+                onValueChange={setSelectValue6}
+                error="Selection Required"
+              >
+                <LinedSelectItem value="option1">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option2">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option3">Menu Element</LinedSelectItem>
+                <LinedSelectItem value="option4">Menu Element</LinedSelectItem>
+              </LinedSelect>
             </div>
           </div>
         </section>

@@ -16,7 +16,7 @@ function TriangleIcon({ className }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M14 11L18.5 17H9.5L14 11Z" fill="currentColor" />
+      <path d="M14 10.5L20.125 17.5H7.875L14 10.5Z" fill="currentColor" />
     </svg>
   );
 }
@@ -64,16 +64,11 @@ function LinedSelect({
       >
         <SelectPrimitive.Trigger
           className={cn(
-            'relative flex h-[50px] w-full cursor-pointer items-center bg-white pr-[50px] transition-all outline-none',
-            // Border - only bottom border
-            'border-0 border-b-bw2 border-solid',
+            'relative flex h-[50px] w-full cursor-pointer items-center border-b-[1.5px] pr-[50px] transition-all outline-none',
+            'rounded-none border-x-0 border-t-0 pl-0', // Lined specific styles
             // Border colors
-            error
-              ? 'border-b-error'
-              : open
-                ? 'border-b-primary-green'
-                : 'border-b-gray-border',
-            // Text color and style
+            error ? 'border-error' : open ? 'border-primary-green' : 'border-gray-border',
+            // Text color
             hasValue ? 'text-black' : 'text-transparent',
             'text-l1 font-medium',
             triggerClassName
@@ -81,13 +76,17 @@ function LinedSelect({
         >
           <SelectPrimitive.Value />
 
-          {/* Dropdown Button */}
-          <div className="rounded-tr-br2 rounded-br-br2 absolute top-0 right-0 bottom-0 flex w-[50px] items-center justify-center bg-white">
+          {/* Icon Container - No Divider for Lined */}
+          <div
+            className={cn(
+              'absolute top-0 right-0 bottom-0 flex w-[50px] items-center justify-center bg-transparent'
+            )}
+          >
             <SelectPrimitive.Icon asChild>
               <TriangleIcon
                 className={cn(
                   'size-7 shrink-0 transition-all duration-200',
-                  open ? 'text-primary-green rotate-0' : 'rotate-180 text-gray-text'
+                  open ? 'text-primary-green rotate-0' : 'rotate-180 text-gray-400'
                 )}
               />
             </SelectPrimitive.Icon>
@@ -101,11 +100,10 @@ function LinedSelect({
             isFloating
               ? [
                   '-top-px left-0 -translate-y-1/2',
-                  'bg-white px-1',
-                  'text-[13px] leading-[18px] font-normal tracking-[-0.32px]',
+                  'text-[13px] leading-[18px] font-normal tracking-[-0.32px]', // C1 style
                   error ? 'text-error' : open ? 'text-primary-green' : 'text-gray-text',
                 ]
-              : ['top-[25px] left-0 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
+              : ['top-1/2 left-0 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
           )}
         >
           {label}
@@ -114,13 +112,13 @@ function LinedSelect({
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className={cn(
-              'rounded-br3 relative z-50 max-h-96 w-[var(--radix-select-trigger-width)] overflow-hidden bg-white shadow-[0px_3px_10px_2px_rgba(0,0,0,0.1)]',
+              'rounded-br3 relative z-50 max-h-96 w-[300px] overflow-hidden bg-white shadow-[0px_3px_10px_2px_rgba(0,0,0,0.1)]',
               'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
             )}
             position="popper"
             sideOffset={10}
           >
-            <SelectPrimitive.Viewport className="p-g2 flex flex-col gap-g0">
+            <SelectPrimitive.Viewport className="p-g2 flex flex-col gap-[0px]">
               {children}
             </SelectPrimitive.Viewport>
           </SelectPrimitive.Content>
@@ -129,9 +127,7 @@ function LinedSelect({
 
       {/* Error Message */}
       {error && (
-        <p className="text-c1 text-error absolute bottom-[-11px] left-0 translate-y-1/2">
-          {error}
-        </p>
+        <p className="text-c1 text-error absolute bottom-[-11px] left-0 translate-y-1/2">{error}</p>
       )}
     </div>
   );
@@ -148,7 +144,6 @@ function LinedSelectItem({
         'px-g3 py-g0 text-l2 rounded-br1 relative flex h-10 w-full cursor-pointer items-center gap-2.5 overflow-clip bg-white font-medium transition-colors outline-none select-none',
         'hover:bg-[#f8f9fb]',
         'focus:bg-[#f8f9fb]',
-        'data-[state=checked]:bg-[#f8f9fb]',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         className
       )}

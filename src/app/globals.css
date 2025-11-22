@@ -89,11 +89,6 @@
   --spacing-g7: 28px;
   --spacing-g8: 32px;
 
-  /* Border Width */
-  --border-width-bw1: 1px;
-  --border-width-bw2: 1.5px;
-  --border-width-bw3: 2px;
-
   /* Border Radius */
   --radius-*: initial;
   --radius-br1: 4px;
@@ -144,6 +139,8 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
+
 
 body {
   font-family:
