@@ -15,9 +15,10 @@ function ClearIcon({ className }: { className?: string }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <circle cx="14" cy="14" r="9" fill="currentColor" />
       <path
-        d="M9.625 9.625L18.375 18.375M18.375 9.625L9.625 18.375"
-        stroke="currentColor"
+        d="M10.5 10.5L17.5 17.5M17.5 10.5L10.5 17.5"
+        stroke="white"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -99,9 +100,9 @@ const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
               }}
               disabled={disabled}
               className={cn(
-                'absolute left-1/2 top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-opacity',
+                'absolute left-1/2 top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-all',
                 hasValue && !disabled ? 'opacity-100' : 'pointer-events-none opacity-0',
-                'text-gray-400 hover:text-gray-600'
+                'text-gray-border'
               )}
               aria-label="Clear input"
             >
