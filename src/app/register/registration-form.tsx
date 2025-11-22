@@ -9,6 +9,7 @@ import { LinedInput } from '@/components/ui/lined-input';
 import { LinedSelect, LinedSelectItem } from '@/components/ui/lined-select';
 
 import { AIStyleSelection } from './ai-style-selection';
+import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
 
 type AIStyleType = 'AUTO' | 'COLD' | 'WARM' | null;
@@ -203,151 +204,167 @@ export function RegistrationForm() {
     }
   };
 
-  // AI 스타일 선택 섹션 표시
-  if (section === 'aiStyle') {
-    return <AIStyleSelection onComplete={handleAIStyleComplete} />;
-  }
-
-  // 기본 정보 입력 섹션
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Header */}
-      <div className="px-g8 py-g6 gap-g3 mb-g4 flex flex-col">
-        <div className="pb-g3">
-          <TossFaceIcon emoji="📝" size={72} />
-        </div>
-        <div className="flex flex-col gap-0">
-          <h1 className="text-h3">사용자님의</h1>
-          <h1 className="text-h3">추가 정보가 필요해요</h1>
-        </div>
-        <p className="text-b1 text-[#797979]">원활한 사용을 위해 다음 정보들을 입력해주세요</p>
-      </div>
-
-      {/* Content */}
-      <div className="px-g8 flex flex-1 flex-col">
-        {step === 0 ? (
-          /* Intro Screen */
-          <div className="gap-g6 flex flex-col">
-            <ul className="text-b2 list-disc space-y-0 pl-5">
-              <li>이름</li>
-              <li>닉네임</li>
-              <li>전화번호</li>
-              <li>생년월일</li>
-              <li>직업 정보</li>
-            </ul>
+    <AnimatePresence mode="wait">
+      {section === 'aiStyle' ? (
+        <motion.div
+          key="aiStyle"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+          className="w-full"
+        >
+          <AIStyleSelection onComplete={handleAIStyleComplete} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="basic"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+          className="flex min-h-screen flex-col"
+        >
+          {/* Header */}
+          <div className="px-g8 py-g6 gap-g3 mb-g4 flex flex-col">
+            <div className="pb-g3">
+              <TossFaceIcon emoji="📝" size={72} />
+            </div>
+            <div className="flex flex-col gap-0">
+              <h1 className="text-h3">사용자님의</h1>
+              <h1 className="text-h3">추가 정보가 필요해요</h1>
+            </div>
+            <p className="text-b1 text-[#797979]">원활한 사용을 위해 다음 정보들을 입력해주세요</p>
           </div>
-        ) : (
-          /* Form Fields */
-          <div className="gap-g7 flex flex-col" onKeyDown={handleKeyDown}>
-            {visibleFields >= 1 && (
-              <LinedInput
-                label="이름"
-                value={formValues.name}
-                onChange={(value) => {
-                  setValue('name', value);
-                  trigger('name');
-                }}
-                error={errors.name?.message}
-                autoFocus={step === 1}
-              />
-            )}
 
-            {visibleFields >= 2 && (
-              <LinedInput
-                label="닉네임"
-                value={formValues.nickname}
-                onChange={(value) => {
-                  setValue('nickname', value);
-                  trigger('nickname');
-                }}
-                error={errors.nickname?.message}
-                autoFocus={step === 2}
-              />
-            )}
+          {/* Content */}
+          <div className="px-g8 flex flex-1 flex-col">
+            {step === 0 ? (
+              /* Intro Screen */
+              <div className="gap-g6 flex flex-col">
+                <ul className="text-b2 list-disc space-y-0 pl-5">
+                  <li>이름</li>
+                  <li>닉네임</li>
+                  <li>전화번호</li>
+                  <li>생년월일</li>
+                  <li>직업 정보</li>
+                </ul>
+              </div>
+            ) : (
+              /* Form Fields */
+              <div className="gap-g7 flex flex-col" onKeyDown={handleKeyDown}>
+                {visibleFields >= 1 && (
+                  <LinedInput
+                    label="이름"
+                    value={formValues.name}
+                    onChange={(value) => {
+                      setValue('name', value);
+                      trigger('name');
+                    }}
+                    error={errors.name?.message}
+                    autoFocus={step === 1}
+                  />
+                )}
 
-            {visibleFields >= 3 && (
-              <LinedInput
-                label="전화번호"
-                value={formValues.phoneNumber}
-                onChange={(value) => {
-                  const cleaned = value.replace(/\D/g, '');
-                  let formatted = cleaned;
-                  if (cleaned.length > 3 && cleaned.length <= 7) {
-                    formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
-                  } else if (cleaned.length > 7) {
-                    formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
-                  }
-                  setValue('phoneNumber', formatted);
-                  trigger('phoneNumber');
-                }}
-                error={errors.phoneNumber?.message}
-                placeholder="010-1234-5678"
-                autoFocus={step === 3}
-              />
-            )}
+                {visibleFields >= 2 && (
+                  <LinedInput
+                    label="닉네임"
+                    value={formValues.nickname}
+                    onChange={(value) => {
+                      setValue('nickname', value);
+                      trigger('nickname');
+                    }}
+                    error={errors.nickname?.message}
+                    autoFocus={step === 2}
+                  />
+                )}
 
-            {visibleFields >= 4 && (
-              <LinedInput
-                label="생년월일"
-                value={formValues.birthDate}
-                onChange={(value) => {
-                  const cleaned = value.replace(/\D/g, '');
-                  let formatted = cleaned;
-                  if (cleaned.length > 4 && cleaned.length <= 6) {
-                    formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4)}`;
-                  } else if (cleaned.length > 6) {
-                    formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4, 6)}. ${cleaned.slice(6, 8)}`;
-                  }
-                  setValue('birthDate', formatted);
-                  trigger('birthDate');
-                }}
-                error={errors.birthDate?.message}
-                placeholder="YYYY. MM. DD"
-                autoFocus={step === 4}
-              />
-            )}
+                {visibleFields >= 3 && (
+                  <LinedInput
+                    label="전화번호"
+                    value={formValues.phoneNumber}
+                    onChange={(value) => {
+                      const cleaned = value.replace(/\D/g, '');
+                      let formatted = cleaned;
+                      if (cleaned.length > 3 && cleaned.length <= 7) {
+                        formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+                      } else if (cleaned.length > 7) {
+                        formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+                      }
+                      setValue('phoneNumber', formatted);
+                      trigger('phoneNumber');
+                    }}
+                    error={errors.phoneNumber?.message}
+                    placeholder="010-1234-5678"
+                    autoFocus={step === 3}
+                  />
+                )}
 
-            {visibleFields >= 5 && (
-              <LinedSelect
-                label="직업"
-                value={formValues.job}
-                onValueChange={(value) => {
-                  setValue('job', value);
-                  trigger('job');
-                }}
-                error={errors.job?.message}
-              >
-                {jobOptions.map((option) => (
-                  <LinedSelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </LinedSelectItem>
-                ))}
-              </LinedSelect>
-            )}
+                {visibleFields >= 4 && (
+                  <LinedInput
+                    label="생년월일"
+                    value={formValues.birthDate}
+                    onChange={(value) => {
+                      const cleaned = value.replace(/\D/g, '');
+                      let formatted = cleaned;
+                      if (cleaned.length > 4 && cleaned.length <= 6) {
+                        formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4)}`;
+                      } else if (cleaned.length > 6) {
+                        formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4, 6)}. ${cleaned.slice(6, 8)}`;
+                      }
+                      setValue('birthDate', formatted);
+                      trigger('birthDate');
+                    }}
+                    error={errors.birthDate?.message}
+                    placeholder="YYYY. MM. DD"
+                    autoFocus={step === 4}
+                  />
+                )}
 
-            {visibleFields >= 5 && formValues.job === 'other' && (
-              <LinedInput
-                label="상세 직업"
-                value={formValues.jobDetail}
-                onChange={(value) => {
-                  setValue('jobDetail', value);
-                  trigger('jobDetail');
-                }}
-                error={errors.jobDetail?.message}
-                placeholder="직업을 입력해주세요"
-                autoFocus
-              />
+                {visibleFields >= 5 && (
+                  <LinedSelect
+                    label="직업"
+                    value={formValues.job}
+                    onValueChange={(value) => {
+                      setValue('job', value);
+                      trigger('job');
+                    }}
+                    error={errors.job?.message}
+                  >
+                    {jobOptions.map((option) => (
+                      <LinedSelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </LinedSelectItem>
+                    ))}
+                  </LinedSelect>
+                )}
+
+                {visibleFields >= 5 && formValues.job === 'other' && (
+                  <LinedInput
+                    label="상세 직업"
+                    value={formValues.jobDetail}
+                    onChange={(value) => {
+                      setValue('jobDetail', value);
+                      trigger('jobDetail');
+                    }}
+                    error={errors.jobDetail?.message}
+                    placeholder="직업을 입력해주세요"
+                    autoFocus
+                  />
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
 
-      {/* Bottom Button */}
-      <div className="p-g5 mt-auto">
-        <Button onClick={handleNext} disabled={isSubmitting} className="w-full" size="default">
-          {step >= 5 ? '완료' : '다음'}
-        </Button>
-      </div>
-    </div>
+          {/* Bottom Button */}
+          <div className="p-g5 mt-auto">
+            <Button onClick={handleNext} disabled={isSubmitting} className="w-full" size="default">
+              {step >= 5 ? '완료' : '다음'}
+            </Button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

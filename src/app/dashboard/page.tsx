@@ -62,11 +62,22 @@ export default async function DashboardPage() {
     weekday: 'long',
   });
 
+  const greetingEmoji = () => {
+    const hour = currentDate.getHours();
+    if (hour < 6) return '🌙';
+    if (hour < 12) return '🌅';
+    if (hour < 18) return '☀️';
+    if (hour < 22) return '🌆';
+    return '🌙';
+  };
+
   const greeting = () => {
     const hour = currentDate.getHours();
+    if (hour < 6) return '늦은 밤이에요';
     if (hour < 12) return '좋은 아침이에요';
     if (hour < 18) return '좋은 오후에요';
-    return '좋은 저녁이에요';
+    if (hour < 22) return '좋은 저녁이에요';
+    return '늦은 밤이에요';
   };
 
   return (
@@ -82,7 +93,7 @@ export default async function DashboardPage() {
       <div className="gap-g2 px-g3 py-g0 mx-auto box-border flex w-full max-w-[430px] flex-col content-stretch items-start overflow-clip pb-[120px]">
         {/* 인사 카드 */}
         <div className="bg-dashboard-nav-bg gap-g3 p-g4 rounded-br3 relative box-border flex w-full shrink-0 content-stretch items-center overflow-clip">
-          <TossFaceIcon emoji="🌙" />
+          <TossFaceIcon emoji={greetingEmoji()} />
           <div className="gap-g0 p-g0 relative box-border flex shrink-0 flex-col content-stretch items-start leading-[0] not-italic">
             <div className="text-black-100 relative flex w-full shrink-0 flex-col justify-center text-[18px] font-semibold tracking-[-0.45px]">
               <p className="leading-[26px]">{greeting()}</p>
