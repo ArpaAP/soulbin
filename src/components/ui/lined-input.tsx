@@ -38,7 +38,18 @@ interface LinedInputProps extends Omit<React.ComponentProps<'input'>, 'value' | 
 
 const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
   (
-    { label, error, value = '', onChange, onClear, className, inputClassName, disabled, ...props },
+    {
+      label,
+      error,
+      value = '',
+      onChange,
+      onClear,
+      className,
+      inputClassName,
+      disabled,
+      placeholder,
+      ...props
+    },
     ref
   ) => {
     const [isFocused, setIsFocused] = React.useState(false);
@@ -77,6 +88,7 @@ const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
               disabled && 'cursor-not-allowed opacity-50',
               inputClassName
             )}
+            placeholder={isFocused ? placeholder : undefined}
             {...props}
           />
 
@@ -91,7 +103,7 @@ const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
               disabled={disabled}
               className={cn(
                 'absolute top-1/2 left-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-all',
-                hasValue && !disabled ? 'opacity-100' : 'pointer-events-none opacity-0',
+                hasValue && isFocused && !disabled ? 'opacity-100' : 'pointer-events-none opacity-0',
                 'text-gray-border'
               )}
               aria-label="Clear input"
