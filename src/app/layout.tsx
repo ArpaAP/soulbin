@@ -32,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} flex min-h-screen items-start justify-center bg-[#ececef] antialiased`}
       >
-        <main className="bg-background min-h-screen w-full max-w-[430px] shadow-xl">
+        <main className="bg-background min-h-screen w-full max-w-[480px] shadow-xl">
           {children}
         </main>
       </body>
