@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 
+import { DashboardNavigation } from '@/components/DashboardNavigation';
+
 import './globals.css';
 import localFont from 'next/font/local';
 
@@ -35,6 +37,9 @@ export default function RootLayout({
         <main className="bg-background min-h-screen w-full max-w-[430px] overflow-x-hidden shadow-xl">
           {children}
         </main>
+
+        {/* Navigation */}
+        <DashboardNavigation />
       </body>
     </html>
   );

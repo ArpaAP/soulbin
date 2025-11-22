@@ -36,9 +36,26 @@ model User {
   birthDate    DateTime?
   job          String?
   aiStyle      AIStyle   @default(AUTO)
+  diaries      Diary[]
 
   @@unique([email])
   @@map("user")
+}
+
+model Diary {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Optional fields for future AI analysis features
+  mood     String?
+  analysis String?
+
+  @@index([userId])
+  @@map("diary")
 }
 
 model Session {

@@ -40,6 +40,7 @@ pnpm prisma db push        # Push schema changes without migrations
 - **React**: Version 19.2.0 with React Compiler enabled
 - **Styling**: Tailwind CSS v4
 - **UI Components**: Radix UI primitives (checkbox, select, slot)
+- **Form Management**: React Hook Form 7.66.1
 - **Utilities**: class-variance-authority, clsx, tailwind-merge
 - **Icons**: lucide-react
 - **Authentication**: BetterAuth with Google OAuth
@@ -286,6 +287,145 @@ Components use:
 - **cn()** utility from `@/lib/utils` for conditional class merging
 - **Slot pattern** from @radix-ui/react-slot for polymorphic components
 - **Custom design tokens** from `globals.css` instead of Shadcn defaults
+
+## Form Management
+
+### React Hook Form
+
+This project uses **React Hook Form 7.66.1** for form state management and validation.
+
+**Key Features**:
+
+- Performant, flexible form validation
+- TypeScript support with type-safe form data
+- Native HTML form validation
+- Minimal re-renders with React 19 compatibility
+- Integration with Radix UI components via Controller
+
+**Basic Usage Pattern**:
+
+```typescript
+'use client';
+import { useForm } from 'react-hook-form';
+
+type FormData = {
+  email: string;
+  password: string;
+};
+
+function MyForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('email', { required: '이메일을 입력해주세요' })} />
+      {errors.email && <p>{errors.email.message}</p>}
+
+      <input
+        type="password"
+        {...register('password', {
+          required: '비밀번호를 입력해주세요',
+          minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
+        })}
+      />
+      {errors.password && <p>{errors.password.message}</p>}
+
+      <button type="submit">제출</button>
+    </form>
+  );
+}
+```
+
+**Integration with Radix UI Components**:
+
+For controlled components like Radix UI Select, use `Controller`:
+
+```typescript
+import { Controller, useForm } from 'react-hook-form';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+
+type FormData = {
+  category: string;
+};
+
+function MyForm() {
+  const { control, handleSubmit } = useForm<FormData>();
+
+  return (
+    <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <Controller
+        name="category"
+        control={control}
+        rules={{ required: '카테고리를 선택해주세요' }}
+        render={({ field }) => (
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger>
+              <SelectValue placeholder="카테고리 선택" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">옵션 1</SelectItem>
+              <SelectItem value="option2">옵션 2</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
+      />
+    </form>
+  );
+}
+```
+
+**Best Practices**:
+
+1. **Type Safety**: Always define TypeScript types for form data
+2. **Validation**: Use built-in validation rules or custom validators
+3. **Error Handling**: Display errors using `formState.errors`
+4. **Controlled Components**: Use `Controller` for Radix UI and other controlled components
+5. **Performance**: Leverage uncontrolled components (`register`) when possible for better performance
+6. **Native HTML**: Prefer native HTML attributes for basic validation (required, pattern, etc.)
+
+**Common Patterns**:
+
+```typescript
+// With default values
+const { register } = useForm<FormData>({
+  defaultValues: {
+    email: '',
+    name: '',
+  },
+});
+
+// With custom validation
+register('email', {
+  validate: (value) => value.includes('@') || '유효한 이메일 주소를 입력해주세요',
+});
+
+// Multiple validation rules
+register('password', {
+  required: '필수 입력 항목입니다',
+  minLength: { value: 8, message: '최소 8자 이상이어야 합니다' },
+  pattern: {
+    value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+    message: '영문과 숫자를 포함해야 합니다',
+  },
+});
+
+// Watch form values
+const watchedValue = watch('fieldName');
+
+// Reset form
+reset();
+
+// Set value programmatically
+setValue('fieldName', 'newValue');
+```
 
 ## Import Order (Prettier)
 

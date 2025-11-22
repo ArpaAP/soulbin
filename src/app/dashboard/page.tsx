@@ -1,4 +1,3 @@
-import { DashboardNavigation } from '@/components/DashboardNavigation';
 import TossFaceIcon from '@/components/TossFaceIcon';
 
 import { IconX } from '@/icons';
@@ -175,9 +174,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-
-      {/* Navigation */}
-      <DashboardNavigation />
     </div>
   );
 }
