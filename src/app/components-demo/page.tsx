@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { FloatingSelect, FloatingSelectItem } from '@/components/ui/floating-select';
+import { OutlinedSelect, OutlinedSelectItem } from '@/components/ui/outlined-select';
 
 export default function ComponentsDemoPage() {
   const [selectValue1, setSelectValue1] = useState('');
@@ -109,19 +109,19 @@ export default function ComponentsDemoPage() {
           <div className="flex flex-col gap-4">
             <h2 className="text-h5">Basic Dropdown</h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <FloatingSelect label="Label" value={selectValue1} onValueChange={setSelectValue1}>
-                <FloatingSelectItem value="option1">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option2">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option3">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option4">Menu Element</FloatingSelectItem>
-              </FloatingSelect>
+              <OutlinedSelect label="Label" value={selectValue1} onValueChange={setSelectValue1}>
+                <OutlinedSelectItem value="option1">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option2">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option3">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option4">Menu Element</OutlinedSelectItem>
+              </OutlinedSelect>
 
-              <FloatingSelect label="Label" value={selectValue2} onValueChange={setSelectValue2}>
-                <FloatingSelectItem value="option1">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option2">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option3">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option4">Menu Element</FloatingSelectItem>
-              </FloatingSelect>
+              <OutlinedSelect label="Label" value={selectValue2} onValueChange={setSelectValue2}>
+                <OutlinedSelectItem value="option1">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option2">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option3">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option4">Menu Element</OutlinedSelectItem>
+              </OutlinedSelect>
             </div>
           </div>
 
@@ -129,17 +129,17 @@ export default function ComponentsDemoPage() {
           <div className="flex flex-col gap-4">
             <h2 className="text-h5">Error State</h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <FloatingSelect
+              <OutlinedSelect
                 label="Label"
                 value={selectValue3}
                 onValueChange={setSelectValue3}
                 error="Selection Required"
               >
-                <FloatingSelectItem value="option1">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option2">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option3">Menu Element</FloatingSelectItem>
-                <FloatingSelectItem value="option4">Menu Element</FloatingSelectItem>
-              </FloatingSelect>
+                <OutlinedSelectItem value="option1">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option2">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option3">Menu Element</OutlinedSelectItem>
+                <OutlinedSelectItem value="option4">Menu Element</OutlinedSelectItem>
+              </OutlinedSelect>
             </div>
           </div>
         </section>

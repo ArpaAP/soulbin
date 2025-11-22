@@ -21,14 +21,14 @@ function TriangleIcon({ className }: { className?: string }) {
   );
 }
 
-interface FloatingSelectProps extends React.ComponentProps<typeof SelectPrimitive.Root> {
+interface OutlinedSelectProps extends React.ComponentProps<typeof SelectPrimitive.Root> {
   label: string;
   error?: string;
   className?: string;
   triggerClassName?: string;
 }
 
-function FloatingSelect({
+function OutlinedSelect({
   label,
   error,
   className,
@@ -37,7 +37,7 @@ function FloatingSelect({
   value,
   onValueChange,
   ...props
-}: FloatingSelectProps) {
+}: OutlinedSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [internalValue, setInternalValue] = React.useState(value);
 
@@ -144,7 +144,7 @@ function FloatingSelect({
   );
 }
 
-function FloatingSelectItem({
+function OutlinedSelectItem({
   className,
   children,
   ...props
@@ -165,11 +165,11 @@ function FloatingSelectItem({
   );
 }
 
-function FloatingSelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
+function OutlinedSelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
   return <SelectPrimitive.Group {...props} />;
 }
 
-function FloatingSelectLabel({
+function OutlinedSelectLabel({
   className,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Label>) {
@@ -181,4 +181,4 @@ function FloatingSelectLabel({
   );
 }
 
-export { FloatingSelect, FloatingSelectItem, FloatingSelectGroup, FloatingSelectLabel };
+export { OutlinedSelect, OutlinedSelectItem, OutlinedSelectGroup, OutlinedSelectLabel };
