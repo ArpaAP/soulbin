@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css');
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -215,4 +217,8 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.tossface {
+  font-family: Tossface;
 }
