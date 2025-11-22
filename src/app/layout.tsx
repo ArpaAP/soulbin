@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import './globals.css';
 import localFont from 'next/font/local';
@@ -15,6 +15,13 @@ export const metadata: Metadata = {
   description: 'AI 기반 감정분석 채팅 서비스',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +29,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} antialiased`}>{children}</body>
+      <body
+        className={`${pretendard.variable} flex min-h-screen items-start justify-center bg-[#ececef] antialiased`}
+      >
+        <main className="bg-background min-h-screen w-full max-w-[430px] shadow-xl">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
