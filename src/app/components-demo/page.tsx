@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { LinedInput } from '@/components/ui/lined-input';
 import { LinedSelect, LinedSelectItem } from '@/components/ui/lined-select';
 import { OutlinedInput } from '@/components/ui/outlined-input';
@@ -25,6 +26,10 @@ export default function ComponentsDemoPage() {
   const [linedInputValue1, setLinedInputValue1] = useState('');
   const [linedInputValue2, setLinedInputValue2] = useState('Initial value');
   const [linedInputValue3, setLinedInputValue3] = useState('');
+
+  const [checked1, setChecked1] = useState(false);
+  const [checked2, setChecked2] = useState(true);
+  const [checked3, setChecked3] = useState(false);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-8 font-sans">
@@ -304,6 +309,60 @@ export default function ComponentsDemoPage() {
                 onChange={() => {}}
                 disabled
               />
+            </div>
+          </div>
+        </section>
+
+        {/* Checkbox Component */}
+        <section className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-h3">Checkbox Component Test</h1>
+            <p className="text-b1 text-zinc-600">Figma 디자인에 맞춘 체크박스 컴포넌트</p>
+          </div>
+
+          {/* Basic Checkbox */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Basic Checkbox</h2>
+            <div className="flex flex-wrap gap-6">
+              <Checkbox label="Label" checked={checked1} onCheckedChange={setChecked1} />
+              <Checkbox label="Label" checked={checked2} onCheckedChange={setChecked2} />
+              <Checkbox label="Label" />
+            </div>
+          </div>
+
+          {/* Without Label */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Without Label</h2>
+            <div className="flex flex-wrap gap-6">
+              <Checkbox checked={checked3} onCheckedChange={setChecked3} />
+              <Checkbox checked={true} />
+              <Checkbox checked={false} />
+            </div>
+          </div>
+
+          {/* Disabled State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Disabled State</h2>
+            <div className="flex flex-wrap gap-6">
+              <Checkbox label="Label" disabled />
+              <Checkbox label="Label" checked disabled />
+              <Checkbox disabled />
+              <Checkbox checked disabled />
+            </div>
+          </div>
+
+          {/* Interactive Demo */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Interactive Demo</h2>
+            <div className="flex flex-col gap-4">
+              <Checkbox
+                label="동의합니다"
+                checked={checked1}
+                onCheckedChange={setChecked1}
+              />
+              <p className="text-c1 text-gray-text">
+                상태: {checked1 ? '체크됨' : '체크 안됨'}
+              </p>
             </div>
           </div>
         </section>
