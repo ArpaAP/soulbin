@@ -24,6 +24,12 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  isRegistered Boolean @default(false)
+  nickname      String?
+  phoneNumber   String?
+  birthDate     DateTime?
+  job           String?
+
   @@unique([email])
   @@map("user")
 }
