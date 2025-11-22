@@ -19,6 +19,7 @@ interface FormData {
   phoneNumber: string;
   birthDate: string;
   job: string;
+  jobDetail: string;
 }
 
 const jobOptions = [
@@ -48,6 +49,7 @@ export function RegistrationForm() {
       phoneNumber: '',
       birthDate: '',
       job: '',
+      jobDetail: '',
     },
     mode: 'onChange',
   });
@@ -87,6 +89,15 @@ export function RegistrationForm() {
 
   register('job', {
     required: '직업을 선택해주세요',
+  });
+
+  register('jobDetail', {
+    validate: (value, formValues) => {
+      if (formValues.job === 'other' && !value) {
+        return '상세 직업을 입력해주세요';
+      }
+      return true;
+    },
   });
 
   // Watch all form values
@@ -139,6 +150,9 @@ export function RegistrationForm() {
         break;
       case 5:
         isValid = await trigger('job');
+        if (isValid && formValues.job === 'other') {
+          isValid = await trigger('jobDetail');
+        }
         break;
     }
 
@@ -162,7 +176,7 @@ export function RegistrationForm() {
           nickname: formValues.nickname,
           phoneNumber: formValues.phoneNumber,
           birthDate: formValues.birthDate,
-          job: formValues.job,
+          job: formValues.job === 'other' ? formValues.jobDetail : formValues.job,
           aiStyle,
         }),
       });
@@ -277,7 +291,14 @@ export function RegistrationForm() {
                 label="생년월일"
                 value={formValues.birthDate}
                 onChange={(value) => {
-                  setValue('birthDate', value);
+                  const cleaned = value.replace(/\D/g, '');
+                  let formatted = cleaned;
+                  if (cleaned.length > 4 && cleaned.length <= 6) {
+                    formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4)}`;
+                  } else if (cleaned.length > 6) {
+                    formatted = `${cleaned.slice(0, 4)}. ${cleaned.slice(4, 6)}. ${cleaned.slice(6, 8)}`;
+                  }
+                  setValue('birthDate', formatted);
                   trigger('birthDate');
                 }}
                 error={errors.birthDate?.message}
@@ -302,6 +323,20 @@ export function RegistrationForm() {
                   </LinedSelectItem>
                 ))}
               </LinedSelect>
+            )}
+
+            {visibleFields >= 5 && formValues.job === 'other' && (
+              <LinedInput
+                label="상세 직업"
+                value={formValues.jobDetail}
+                onChange={(value) => {
+                  setValue('jobDetail', value);
+                  trigger('jobDetail');
+                }}
+                error={errors.jobDetail?.message}
+                placeholder="직업을 입력해주세요"
+                autoFocus
+              />
             )}
           </div>
         )}
