@@ -18,27 +18,18 @@ export async function POST(request: Request) {
 
     // 필수 필드 검증
     if (!nickname || !phoneNumber || !birthDate || !job || !aiStyle) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // aiStyle 검증
     if (!['AUTO', 'COLD', 'WARM'].includes(aiStyle)) {
-      return NextResponse.json(
-        { error: 'Invalid AI style' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid AI style' }, { status: 400 });
     }
 
     // 생년월일 파싱 (예: "2005. 06. 01" -> Date)
     const parsedBirthDate = parseBirthDate(birthDate);
     if (!parsedBirthDate) {
-      return NextResponse.json(
-        { error: 'Invalid birth date format' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid birth date format' }, { status: 400 });
     }
 
     // 사용자 정보 업데이트
@@ -70,10 +61,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -103,11 +91,7 @@ function parseBirthDate(dateString: string): Date | null {
     const date = new Date(year, month - 1, day);
 
     // 유효한 날짜인지 확인
-    if (
-      date.getFullYear() !== year ||
-      date.getMonth() !== month - 1 ||
-      date.getDate() !== day
-    ) {
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
       return null;
     }
 

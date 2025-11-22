@@ -222,3 +222,7 @@ body {
 .tossface {
   font-family: Tossface;
 }
+
+button {
+  cursor: pointer;
+}

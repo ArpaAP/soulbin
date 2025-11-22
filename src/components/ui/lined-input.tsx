@@ -103,7 +103,9 @@ const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
               disabled={disabled}
               className={cn(
                 'absolute top-1/2 left-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-all',
-                hasValue && isFocused && !disabled ? 'opacity-100' : 'pointer-events-none opacity-0',
+                hasValue && isFocused && !disabled
+                  ? 'opacity-100'
+                  : 'pointer-events-none opacity-0',
                 'text-gray-border'
               )}
               aria-label="Clear input"
