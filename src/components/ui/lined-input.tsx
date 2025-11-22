@@ -108,7 +108,13 @@ const LinedInput = React.forwardRef<HTMLInputElement, LinedInputProps>(
                 ? [
                     '-top-px left-0 -translate-y-1/2',
                     'text-[13px] leading-[18px] font-normal tracking-[-0.32px]', // C1 style
-                    error ? 'text-error' : disabled ? 'text-gray-text' : 'text-primary-green',
+                    error
+                      ? 'text-error'
+                      : disabled
+                        ? 'text-gray-text'
+                        : isFocused
+                          ? 'text-primary-green'
+                          : 'text-gray-text',
                   ]
                 : ['top-1/2 left-0 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
             )}

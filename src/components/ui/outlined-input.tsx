@@ -112,7 +112,13 @@ const OutlinedInput = React.forwardRef<HTMLInputElement, OutlinedInputProps>(
                     '-top-px left-[15px] -translate-y-1/2',
                     'bg-white px-1',
                     'text-[13px] leading-[18px] font-normal tracking-[-0.32px]',
-                    error ? 'text-error' : disabled ? 'text-gray-text' : 'text-primary-green',
+                    error
+                      ? 'text-error'
+                      : disabled
+                        ? 'text-gray-text'
+                        : isFocused
+                          ? 'text-primary-green'
+                          : 'text-gray-text',
                   ]
                 : ['left-g4 top-1/2 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
             )}
