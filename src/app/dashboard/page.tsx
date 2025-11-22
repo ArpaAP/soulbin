@@ -1,17 +1,11 @@
 import { DashboardNavigation } from '@/components/DashboardNavigation';
+import TossFaceIcon from '@/components/TossFaceIcon';
 
 import { IconX } from '@/icons';
-
-function TossFaceIcon({ emoji, size = 32 }: { emoji: string; size?: number }) {
-  return (
-    <div
-      className="relative flex shrink-0 items-center justify-center"
-      style={{ width: size, height: size, fontSize: size * 0.876 }}
-    >
-      <span className="tossface">{emoji}</span>
-    </div>
-  );
-}
+import { auth } from '@/lib/auth';
+import prisma from '@/lib/prisma';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 function GrayIcon() {
   return (
@@ -44,7 +38,23 @@ function GrayIcon() {
   );
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect('/');
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  if (!user?.isRegistered) {
+    redirect('/register');
+  }
+
   const currentDate = new Date();
   const dateString = currentDate.toLocaleDateString('ko-KR', {
     month: 'long',

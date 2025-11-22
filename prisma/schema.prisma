@@ -13,6 +13,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum AIStyle {
+  AUTO
+  COLD
+  WARM
+}
+
 model User {
   id            String    @id
   name          String
@@ -24,11 +30,12 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  isRegistered Boolean @default(false)
-  nickname      String?
-  phoneNumber   String?
-  birthDate     DateTime?
-  job           String?
+  isRegistered Boolean   @default(false)
+  nickname     String?
+  phoneNumber  String?
+  birthDate    DateTime?
+  job          String?
+  aiStyle      AIStyle   @default(AUTO)
 
   @@unique([email])
   @@map("user")
