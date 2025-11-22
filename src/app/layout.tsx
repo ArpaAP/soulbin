@@ -12,7 +12,7 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: 'SoulBin',
-  description: '감쓰통',
+  description: 'AI 기반 감정분석 채팅 서비스',
 };
 
 export default function RootLayout({
