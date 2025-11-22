@@ -95,6 +95,7 @@
   --radius-br2: 8px;
   --radius-br3: 12px;
   --radius-br4: 16px;
+  --radius-br5: 24px;
 
   /* Design System Colors */
   --color-primary-green: #62c762;
@@ -103,6 +104,19 @@
   --color-error: #ff4130;
   --color-gray-border: #dadee9;
   --color-gray-text: #4d4d4d;
+
+  /* Dashboard Navigation Colors */
+  --color-dashboard-nav-bg: #ffffff;
+  --color-dashboard-nav-border: #e6e9f0;
+  --color-dashboard-nav-selected: #3c3c3c;
+  --color-dashboard-nav-unselected: #d2d5da;
+
+  /* Semantic Colors */
+  --color-black-100: #000000;
+  --color-black-200: #111111;
+  --color-grey-300: #797979;
+  --color-white-100: #ffffff;
+  --color-bg: #f3f4f6;
 
   /* Colors */
   --color-sidebar-ring: var(--sidebar-ring);
