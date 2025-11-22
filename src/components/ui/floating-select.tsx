@@ -136,7 +136,7 @@ function FloatingSelect({
 
       {/* Error Message */}
       {error && (
-        <p className="text-h1 text-error absolute bottom-[-11px] left-2.5 translate-y-1/2">
+        <p className="text-c1 text-error absolute bottom-[-11px] left-2.5 translate-y-1/2">
           {error}
         </p>
       )}
