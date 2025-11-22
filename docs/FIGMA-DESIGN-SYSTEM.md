@@ -42,6 +42,7 @@ This document provides comprehensive rules for integrating Figma designs into th
 #### Available Design Tokens
 
 **Typography Classes** (use directly in className):
+
 - Headings: `text-h1`, `text-h2`, `text-h3`, `text-h4`, `text-h5`, `text-h6`
   - Each includes: font-size, line-height, letter-spacing, font-weight
   - Example: `text-h1` = 40px/56px, -1px spacing, weight 700
@@ -50,15 +51,18 @@ This document provides comprehensive rules for integrating Figma designs into th
 - Captions: `text-c1` (13px), `text-c2` (11px)
 
 **Spacing Tokens** (gap system):
+
 - `g0` through `g8`: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 28px, 32px
 - Usage: `py-g2`, `px-g4`, `gap-g3`, `mt-g5`
 
 **Border Tokens**:
+
 - Width: `bw1` (1px), `bw2` (1.5px), `bw3` (2px)
 - Radius: `br1` (4px), `br2` (8px), `br3` (12px), `br4` (16px)
 - Usage: `border-[1.5px]` or `border-bw2`, then `rounded-br2`
 
 **Color Tokens**:
+
 - `primary-green`: #62c762
 - `white`: #ffffff
 - `black`: #000000
@@ -71,12 +75,14 @@ This document provides comprehensive rules for integrating Figma designs into th
 **NO transformation system**: Tokens are used directly via Tailwind CSS v4's `@theme inline` directive.
 
 **DO NOT** use CSS variables manually:
+
 - ❌ WRONG: `py-[var(--spacing-g0)]`
 - ✅ CORRECT: `py-g0`
 
 ## 2. Component Library
 
 ### Location
+
 - **Path**: `src/components/ui/`
 - **Pattern**: One component per file (e.g., `button.tsx`, `select.tsx`)
 
@@ -85,22 +91,28 @@ This document provides comprehensive rules for integrating Figma designs into th
 **Framework**: React 19.2.0 with React Compiler (enabled in `next.config.ts`)
 
 **Component Pattern**:
+
 ```tsx
 import * as React from 'react';
+
 import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 
-const componentVariants = cva(
-  "base classes using design tokens",
-  {
-    variants: {
-      variant: { /* ... */ },
-      size: { /* ... */ },
+const componentVariants = cva('base classes using design tokens', {
+  variants: {
+    variant: {
+      /* ... */
     },
-    defaultVariants: { /* ... */ },
-  }
-);
+    size: {
+      /* ... */
+    },
+  },
+  defaultVariants: {
+    /* ... */
+  },
+});
 
 function Component({ className, variant, size, ...props }: ComponentProps) {
   return (
@@ -145,16 +157,19 @@ export { Component, componentVariants };
 ## 3. Frameworks & Libraries
 
 ### UI Framework
+
 - **Next.js 16.0.3** (App Router)
 - **React 19.2.0** with React Compiler enabled
 - **TypeScript 5**
 
 ### Styling System
+
 - **Tailwind CSS v4** (CRITICAL: v4 has breaking changes from v3)
 - **PostCSS Plugin**: `@tailwindcss/postcss` (see `postcss.config.mjs`)
 - **Additional**: `tw-animate-css` for animations
 
 ### Key Dependencies
+
 ```json
 {
   "@radix-ui/react-*": "Accessible primitives",
@@ -166,11 +181,13 @@ export { Component, componentVariants };
 ```
 
 ### Build System
+
 - **Bundler**: Next.js built-in (Turbopack/Webpack)
 - **Package Manager**: pnpm 10.23.0 (REQUIRED)
 - **React Compiler**: Enabled for automatic memoization
 
 ### Build Commands
+
 ```bash
 pnpm build    # REQUIRED before deployment
 pnpm start    # Production server
@@ -183,6 +200,7 @@ pnpm format   # Prettier formatting
 ## 4. Asset Management
 
 ### Storage Location
+
 - **Fonts**: `src/app/fonts/`
   - Pretendard Variable: `PretendardVariable.woff2`
 - **Images**: No dedicated folder yet (TBD based on Figma assets)
@@ -190,6 +208,7 @@ pnpm format   # Prettier formatting
 ### Asset Loading
 
 **Fonts** (see `src/app/layout.tsx`):
+
 ```tsx
 import localFont from 'next/font/local';
 
@@ -205,25 +224,30 @@ const pretendard = localFont({
 ```
 
 **Font Configuration**:
+
 - Variable name: `--font-pretendard`
 - Weight range: 45-920
 - Applied globally with `antialiased` smoothing
 - Full fallback chain in `globals.css:149-164`
 
 ### Asset Optimization
+
 - **Fonts**: Loaded as local woff2 (optimized)
 - **Images**: Use Next.js `<Image>` component (automatic optimization)
 
 ### CDN Configuration
+
 - **None currently configured**
 - Next.js automatic image optimization via `/_next/image`
 
 ## 5. Icon System
 
 ### Library
+
 **lucide-react** (v0.554.0)
 
 ### Icon Storage
+
 - **Location**: NPM package (no local storage)
 - **Import**: Named imports from `lucide-react`
 
@@ -233,14 +257,16 @@ const pretendard = localFont({
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 // In component:
-<ChevronDownIcon className="size-4 opacity-50" />
+<ChevronDownIcon className="size-4 opacity-50" />;
 ```
 
 ### Icon Naming Convention
+
 - **PascalCase** with "Icon" suffix
 - Examples: `CheckIcon`, `ChevronDownIcon`, `ChevronUpIcon`
 
 ### Icon Sizing
+
 - Default size controlled via component classes
 - Standard size: `size-4` (16px), `size-[22px]` (buttons)
 - Use `[&_svg:not([class*='size-'])]:size-4` pattern for automatic sizing
@@ -248,30 +274,42 @@ import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 ## 6. Styling Approach
 
 ### CSS Methodology
+
 **Tailwind CSS v4 Utility-First**
 
 **Configuration**: No `tailwind.config.ts` file (v4 uses inline theme)
 
 ### Global Styles
+
 **Location**: `src/app/globals.css`
 
 **Structure**:
+
 ```css
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@theme inline { /* ... */ }
+@theme inline {
+  /* ... */
+}
 
-body { /* font stack */ }
+body {
+  /* font stack */
+}
 
-:root { /* CSS variables for semantic colors */ }
+:root {
+  /* CSS variables for semantic colors */
+}
 
-@layer base { /* ... */ }
+@layer base {
+  /* ... */
+}
 ```
 
 ### Responsive Design
 
 **Tailwind Breakpoints** (default):
+
 - `sm`: 640px
 - `md`: 768px
 - `lg`: 1024px
@@ -283,43 +321,48 @@ body { /* font stack */ }
 ### Critical Styling Rules for Figma Integration
 
 #### 1. NEVER Use `var()` Syntax
+
 ```tsx
 // ❌ WRONG
-className="py-[var(--spacing-g0)]"
+className = 'py-[var(--spacing-g0)]';
 
 // ✅ CORRECT
-className="py-g0"
+className = 'py-g0';
 ```
 
 #### 2. ALWAYS Specify Border Thickness
+
 Tailwind v4 requires explicit border width:
+
 ```tsx
 // ❌ WRONG (color only won't work)
-className="border-gray-border"
+className = 'border-gray-border';
 
 // ✅ CORRECT
-className="border-[1.5px] border-gray-border"
+className = 'border-[1.5px] border-gray-border';
 // OR
-className="border-bw2 border-gray-border rounded-br2"
+className = 'border-bw2 border-gray-border rounded-br2';
 ```
 
 #### 3. Use Design Token Classes Directly
+
 ```tsx
 // Typography
-className="text-h1"          // Not text-[40px]
-className="text-l2"          // Not text-[14px]
+className = 'text-h1'; // Not text-[40px]
+className = 'text-l2'; // Not text-[14px]
 
 // Spacing
-className="py-g2 px-g4 gap-g3"  // Not py-[8px]
+className = 'py-g2 px-g4 gap-g3'; // Not py-[8px]
 
 // Border radius
-className="rounded-br2"      // Not rounded-[8px]
+className = 'rounded-br2'; // Not rounded-[8px]
 
 // Colors
-className="bg-primary-green text-white"
+className = 'bg-primary-green text-white';
 ```
 
 #### 4. Class Merging with cn()
+
 ```tsx
 import { cn } from '@/lib/utils';
 
@@ -331,6 +374,7 @@ className={cn(
 ```
 
 ### Dark Mode
+
 - **System**: CSS variables in `:root` (see `globals.css:167-200`)
 - **No dark mode toggle implemented yet**
 
@@ -371,12 +415,15 @@ soulbin/
 ```
 
 ### Feature Organization Pattern
+
 - **App Router structure**: One folder per route
 - **Components**: Shared in `src/components/ui/`
 - **Utilities**: In `src/lib/`
 
 ### Import Path Aliases
+
 **Configuration**: `tsconfig.json:22`
+
 ```json
 {
   "paths": {
@@ -386,15 +433,19 @@ soulbin/
 ```
 
 **Usage**:
+
 ```tsx
 import { Button } from '@/components/ui/button';
+
 import { cn } from '@/lib/utils';
 ```
 
 ### Import Ordering (Prettier)
+
 **Configuration**: `.prettierrc:9-24`
 
 **Order**:
+
 1. React imports
 2. Third-party modules
 3. `@/components`, `@/pages`
@@ -407,27 +458,33 @@ import { cn } from '@/lib/utils';
 ## 8. Figma Integration Workflow
 
 ### Step 1: Extract Design from Figma
+
 Use MCP Figma Desktop tools:
+
 ```typescript
 // Get design context (includes code, styles, assets)
-mcp__figma-desktop__get_design_context({
-  nodeId: "123:456",  // From Figma URL
-  clientLanguages: "typescript",
-  clientFrameworks: "react,next,tailwind"
-})
+mcp__figma -
+  desktop__get_design_context({
+    nodeId: '123:456', // From Figma URL
+    clientLanguages: 'typescript',
+    clientFrameworks: 'react,next,tailwind',
+  });
 
 // Get variable definitions
-mcp__figma-desktop__get_variable_defs({
-  nodeId: "123:456"
-})
+mcp__figma -
+  desktop__get_variable_defs({
+    nodeId: '123:456',
+  });
 
 // Get screenshot for reference
-mcp__figma-desktop__get_screenshot({
-  nodeId: "123:456"
-})
+mcp__figma -
+  desktop__get_screenshot({
+    nodeId: '123:456',
+  });
 ```
 
 ### Step 2: Sync Design Tokens
+
 1. Compare Figma variables with `src/app/globals.css`
 2. Update `@theme inline` block if variables changed
 3. Ensure token naming matches pattern:
@@ -437,6 +494,7 @@ mcp__figma-desktop__get_screenshot({
    - Colors: `--color-{name}`
 
 ### Step 3: Create Component
+
 1. Check if Radix UI primitive exists for accessibility
 2. Create file in `src/components/ui/{component}.tsx`
 3. Use CVA for variants
@@ -444,6 +502,7 @@ mcp__figma-desktop__get_screenshot({
 5. Export component + variants
 
 ### Step 4: Implementation Checklist
+
 - [ ] Design tokens used (no hardcoded values)
 - [ ] Border has explicit thickness (`border-[1.5px]`)
 - [ ] No `var()` syntax used
@@ -455,6 +514,7 @@ mcp__figma-desktop__get_screenshot({
 - [ ] Responsive design considered
 
 ### Step 5: Verify
+
 ```bash
 pnpm format   # Auto-format
 pnpm lint     # Check for errors
@@ -464,9 +524,11 @@ pnpm build    # Ensure build succeeds
 ## 9. Common Patterns from Existing Components
 
 ### Button Component Pattern
+
 **File**: `src/components/ui/button.tsx`
 
 **Key Features**:
+
 - CVA variants: `flat`, `outline`, `destructive`, `secondary`, `ghost`, `link`
 - Size variants: `default`, `sm`, `lg`, `icon`, `icon-sm`, `icon-lg`
 - Pseudo-element hover effects using `before:` and `after:` modifiers
@@ -474,15 +536,18 @@ pnpm build    # Ensure build succeeds
 - Design token usage: `gap-g1`, `text-l1`, `rounded-br2`, `bg-primary-green`
 
 **Border thickness example**:
+
 ```tsx
 // outline variant (line 14-15)
-'border-[1.5px] border-primary-green bg-transparent text-primary-green rounded-br2'
+'border-[1.5px] border-primary-green bg-transparent text-primary-green rounded-br2';
 ```
 
 ### Select Component Pattern
+
 **File**: `src/components/ui/select.tsx`
 
 **Key Features**:
+
 - Wraps Radix UI primitives
 - Multiple sub-components exported
 - Size variants via data attributes: `data-size={size}`
@@ -491,6 +556,7 @@ pnpm build    # Ensure build succeeds
 - Design token usage throughout
 
 ### Conditional Styling Pattern
+
 ```tsx
 className={cn(
   "base styles",
@@ -504,6 +570,7 @@ className={cn(
 ## 10. Figma-Specific MCP Tools Reference
 
 ### Available Tools
+
 1. `mcp__figma-desktop__get_design_context` - Get full design with code
 2. `mcp__figma-desktop__get_variable_defs` - Get design variables
 3. `mcp__figma-desktop__get_screenshot` - Visual reference
@@ -511,10 +578,12 @@ className={cn(
 5. `mcp__figma-desktop__create_design_system_rules` - Generate rules doc
 
 ### Node ID Extraction
+
 From Figma URL: `https://figma.com/design/:fileKey/:fileName?node-id=1-2`
 Extract node ID: `1:2` (replace hyphen with colon)
 
 ### Tool Parameters
+
 ```typescript
 {
   nodeId: "1:2",              // Optional, defaults to selected
@@ -527,23 +596,27 @@ Extract node ID: `1:2` (replace hyphen with colon)
 ## 11. Critical Reminders
 
 ### Tailwind CSS v4 Breaking Changes
+
 - No `tailwind.config.ts` file
 - Theme in `@theme inline` directive
 - Direct token usage (no `var()`)
 - Border thickness required
 
 ### Figma Synchronization
+
 - `globals.css` tokens = Figma variables
 - Must stay in sync
 - Always check Figma before adding new tokens
 - Update tokens if Figma design system changes
 
 ### Development Rules
+
 - Never run `pnpm dev`
 - Always use `pnpm build` before deployment
 - Format with `pnpm format` before committing
 
 ### Language & Localization
+
 - Primary language: Korean (`lang="ko"`)
 - App name: SoulBin
 - Description: "AI 기반 감정분석 채팅 서비스"

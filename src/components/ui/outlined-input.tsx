@@ -38,17 +38,7 @@ interface OutlinedInputProps extends Omit<React.ComponentProps<'input'>, 'value'
 
 const OutlinedInput = React.forwardRef<HTMLInputElement, OutlinedInputProps>(
   (
-    {
-      label,
-      error,
-      value = '',
-      onChange,
-      onClear,
-      className,
-      inputClassName,
-      disabled,
-      ...props
-    },
+    { label, error, value = '', onChange, onClear, className, inputClassName, disabled, ...props },
     ref
   ) => {
     const [isFocused, setIsFocused] = React.useState(false);
@@ -78,11 +68,7 @@ const OutlinedInput = React.forwardRef<HTMLInputElement, OutlinedInputProps>(
             className={cn(
               'pl-g4 rounded-br2 relative flex h-[50px] w-full border-[1.5px] bg-white pr-[50px] transition-all outline-none',
               // Border colors
-              error
-                ? 'border-error'
-                : isFocused
-                  ? 'border-primary-green'
-                  : 'border-gray-border',
+              error ? 'border-error' : isFocused ? 'border-primary-green' : 'border-gray-border',
               // Text color and style
               hasValue ? 'text-black' : 'text-transparent',
               'text-l1 font-medium',
@@ -107,7 +93,7 @@ const OutlinedInput = React.forwardRef<HTMLInputElement, OutlinedInputProps>(
               }}
               disabled={disabled}
               className={cn(
-                'absolute left-1/2 top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-all',
+                'absolute top-1/2 left-1/2 size-7 -translate-x-1/2 -translate-y-1/2 transition-all',
                 hasValue && !disabled ? 'opacity-100' : 'pointer-events-none opacity-0',
                 'text-gray-border'
               )}
@@ -128,11 +114,7 @@ const OutlinedInput = React.forwardRef<HTMLInputElement, OutlinedInputProps>(
                     'text-[13px] leading-[18px] font-normal tracking-[-0.32px]',
                     error ? 'text-error' : disabled ? 'text-gray-text' : 'text-primary-green',
                   ]
-                : [
-                    'left-g4 top-1/2 -translate-y-1/2',
-                    'text-l1 font-medium',
-                    'text-gray-text',
-                  ]
+                : ['left-g4 top-1/2 -translate-y-1/2', 'text-l1 font-medium', 'text-gray-text']
             )}
           >
             {label}

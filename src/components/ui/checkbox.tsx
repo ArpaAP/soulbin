@@ -38,14 +38,14 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
     const checkboxId = id || generatedId;
 
     return (
-      <div className={cn('flex items-center gap-g2', disabled && 'opacity-50', className)}>
+      <div className={cn('gap-g2 flex items-center', disabled && 'opacity-50', className)}>
         <CheckboxPrimitive.Root
           ref={ref}
           id={checkboxId}
           disabled={disabled}
           className={cn(
-            'relative size-5 shrink-0 rounded-br1 border-[1.5px] transition-all',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-green focus-visible:ring-offset-2',
+            'rounded-br1 relative size-5 shrink-0 border-[1.5px] transition-all',
+            'focus-visible:ring-primary-green focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
             'disabled:cursor-not-allowed',
             // Default state
             'border-gray-border bg-white',
@@ -63,7 +63,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           <label
             htmlFor={checkboxId}
             className={cn(
-              'text-b3 cursor-pointer select-none font-medium leading-5 text-black',
+              'text-b3 cursor-pointer leading-5 font-medium text-black select-none',
               disabled && 'cursor-not-allowed'
             )}
           >

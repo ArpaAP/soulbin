@@ -11,7 +11,7 @@ Tailwind v4 introduces the `@theme` directive as the primary mechanism for defin
 ## Basic Syntax
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-mint-500: oklch(0.72 0.11 178);
@@ -23,6 +23,7 @@ This automatically generates corresponding utility classes like `bg-mint-500` an
 ## Customization Patterns
 
 ### Extending the Default Theme
+
 Add new design tokens while keeping defaults:
 
 ```css
@@ -32,6 +33,7 @@ Add new design tokens while keeping defaults:
 ```
 
 ### Overriding Defaults
+
 Redefine existing tokens:
 
 ```css
@@ -41,6 +43,7 @@ Redefine existing tokens:
 ```
 
 ### Complete Theme Replacement
+
 Use the asterisk syntax to reset entire namespaces:
 
 ```css
@@ -65,34 +68,40 @@ Or disable all defaults entirely:
 
 Each namespace maps to specific utilities:
 
-| Namespace | Generates | Examples |
-|-----------|-----------|----------|
-| `--color-*` | Color utilities | `bg-*`, `text-*`, `fill-*`, `border-*` |
-| `--font-*` | Font family utilities | `font-sans`, `font-serif` |
-| `--text-*` | Font size utilities | `text-sm`, `text-lg` |
-| `--breakpoint-*` | Responsive variants | `sm:`, `md:`, `lg:` |
-| `--spacing-*` | Padding, margin, sizing | `p-*`, `m-*`, `w-*`, `h-*` |
-| `--radius-*` | Border radius utilities | `rounded-*` |
-| `--shadow-*` | Box shadow utilities | `shadow-*` |
-| `--animate-*` | Animation utilities | `animate-*` |
-| `--border-width-*` | Border width utilities | `border-*` (when used with width) |
+| Namespace          | Generates               | Examples                               |
+| ------------------ | ----------------------- | -------------------------------------- |
+| `--color-*`        | Color utilities         | `bg-*`, `text-*`, `fill-*`, `border-*` |
+| `--font-*`         | Font family utilities   | `font-sans`, `font-serif`              |
+| `--text-*`         | Font size utilities     | `text-sm`, `text-lg`                   |
+| `--breakpoint-*`   | Responsive variants     | `sm:`, `md:`, `lg:`                    |
+| `--spacing-*`      | Padding, margin, sizing | `p-*`, `m-*`, `w-*`, `h-*`             |
+| `--radius-*`       | Border radius utilities | `rounded-*`                            |
+| `--shadow-*`       | Box shadow utilities    | `shadow-*`                             |
+| `--animate-*`      | Animation utilities     | `animate-*`                            |
+| `--border-width-*` | Border width utilities  | `border-*` (when used with width)      |
 
 ## Advanced Features
 
 ### Animation Keyframes
+
 Define keyframe animations within `@theme`:
 
 ```css
 @theme {
   --animate-fade-in: fade-in 0.3s ease-out;
   @keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 ```
 
 ### Referencing Other Variables: `@theme inline`
+
 Use the `inline` option when variables reference other CSS variables:
 
 ```css
@@ -105,6 +114,7 @@ Use the `inline` option when variables reference other CSS variables:
 **IMPORTANT**: This is what we use in our `globals.css` file when referencing CSS variables!
 
 ### Generating All CSS Variables: `@theme static`
+
 Force generation of unused variables:
 
 ```css
@@ -116,6 +126,7 @@ Force generation of unused variables:
 ## Why @theme Instead of :root?
 
 The `@theme` directive serves dual purposes:
+
 1. Defining CSS variables
 2. Instructing Tailwind to generate corresponding utility classes
 
@@ -126,12 +137,12 @@ This explicit syntax ensures design tokens are always top-level and properly enf
 ### Custom Color System
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-*: initial;
   --color-brand-light: oklch(0.95 0.05 200);
-  --color-brand-dark: oklch(0.30 0.15 200);
+  --color-brand-dark: oklch(0.3 0.15 200);
 }
 ```
 
@@ -176,8 +187,8 @@ Share theme definitions via separate CSS files:
 
 ```css
 /* app.css */
-@import "tailwindcss";
-@import "../brand/theme.css";
+@import 'tailwindcss';
+@import '../brand/theme.css';
 ```
 
 This enables consistent design systems across monorepos or published packages.

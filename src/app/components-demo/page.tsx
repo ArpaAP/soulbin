@@ -324,8 +324,20 @@ export default function ComponentsDemoPage() {
           <div className="flex flex-col gap-4">
             <h2 className="text-h5">Basic Checkbox</h2>
             <div className="flex flex-wrap gap-6">
-              <Checkbox label="Label" checked={checked1} onCheckedChange={setChecked1} />
-              <Checkbox label="Label" checked={checked2} onCheckedChange={setChecked2} />
+              <Checkbox
+                label="Label"
+                checked={checked1}
+                onCheckedChange={(checked) => {
+                  if (checked !== 'indeterminate') setChecked1(checked);
+                }}
+              />
+              <Checkbox
+                label="Label"
+                checked={checked2}
+                onCheckedChange={(checked) => {
+                  if (checked !== 'indeterminate') setChecked2(checked);
+                }}
+              />
               <Checkbox label="Label" />
             </div>
           </div>
@@ -334,7 +346,12 @@ export default function ComponentsDemoPage() {
           <div className="flex flex-col gap-4">
             <h2 className="text-h5">Without Label</h2>
             <div className="flex flex-wrap gap-6">
-              <Checkbox checked={checked3} onCheckedChange={setChecked3} />
+              <Checkbox
+                checked={checked3}
+                onCheckedChange={(checked) => {
+                  if (checked !== 'indeterminate') setChecked3(checked);
+                }}
+              />
               <Checkbox checked={true} />
               <Checkbox checked={false} />
             </div>
@@ -358,11 +375,11 @@ export default function ComponentsDemoPage() {
               <Checkbox
                 label="동의합니다"
                 checked={checked1}
-                onCheckedChange={setChecked1}
+                onCheckedChange={(checked) => {
+                  if (checked !== 'indeterminate') setChecked1(checked);
+                }}
               />
-              <p className="text-c1 text-gray-text">
-                상태: {checked1 ? '체크됨' : '체크 안됨'}
-              </p>
+              <p className="text-c1 text-gray-text">상태: {checked1 ? '체크됨' : '체크 안됨'}</p>
             </div>
           </div>
         </section>
