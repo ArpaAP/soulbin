@@ -256,7 +256,14 @@ export function RegistrationForm() {
                 label="전화번호"
                 value={formValues.phoneNumber}
                 onChange={(value) => {
-                  setValue('phoneNumber', value);
+                  const cleaned = value.replace(/\D/g, '');
+                  let formatted = cleaned;
+                  if (cleaned.length > 3 && cleaned.length <= 7) {
+                    formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+                  } else if (cleaned.length > 7) {
+                    formatted = `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+                  }
+                  setValue('phoneNumber', formatted);
                   trigger('phoneNumber');
                 }}
                 error={errors.phoneNumber?.message}
