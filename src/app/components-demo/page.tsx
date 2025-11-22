@@ -5,7 +5,9 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { LinedInput } from '@/components/ui/lined-input';
 import { LinedSelect, LinedSelectItem } from '@/components/ui/lined-select';
+import { OutlinedInput } from '@/components/ui/outlined-input';
 import { OutlinedSelect, OutlinedSelectItem } from '@/components/ui/outlined-select';
 
 export default function ComponentsDemoPage() {
@@ -15,6 +17,14 @@ export default function ComponentsDemoPage() {
   const [selectValue4, setSelectValue4] = useState('');
   const [selectValue5, setSelectValue5] = useState('option1');
   const [selectValue6, setSelectValue6] = useState('');
+
+  const [inputValue1, setInputValue1] = useState('');
+  const [inputValue2, setInputValue2] = useState('Initial value');
+  const [inputValue3, setInputValue3] = useState('');
+
+  const [linedInputValue1, setLinedInputValue1] = useState('');
+  const [linedInputValue2, setLinedInputValue2] = useState('Initial value');
+  const [linedInputValue3, setLinedInputValue3] = useState('');
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-8 font-sans">
@@ -192,6 +202,108 @@ export default function ComponentsDemoPage() {
                 <LinedSelectItem value="option3">Menu Element</LinedSelectItem>
                 <LinedSelectItem value="option4">Menu Element</LinedSelectItem>
               </LinedSelect>
+            </div>
+          </div>
+        </section>
+
+        {/* Outlined Input Component */}
+        <section className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-h3">Outlined Input Component Test</h1>
+            <p className="text-b1 text-zinc-600">
+              Floating Label 애니메이션이 적용된 텍스트 입력 컴포넌트
+            </p>
+          </div>
+
+          {/* Basic Input */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Basic Input</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <OutlinedInput label="Placeholder" value={inputValue1} onChange={setInputValue1} />
+
+              <OutlinedInput label="Placeholder" value={inputValue2} onChange={setInputValue2} />
+            </div>
+          </div>
+
+          {/* Error State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Error State</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <OutlinedInput
+                label="Email"
+                value={inputValue3}
+                onChange={setInputValue3}
+                error="Selection Required"
+              />
+            </div>
+          </div>
+
+          {/* Disabled State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Disabled State</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <OutlinedInput label="Placeholder" value="" onChange={() => {}} disabled />
+              <OutlinedInput
+                label="Placeholder"
+                value="Disabled with value"
+                onChange={() => {}}
+                disabled
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Lined Input Component */}
+        <section className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-h3">Lined Input Component Test</h1>
+            <p className="text-b1 text-zinc-600">
+              하단 Border만 있는 Lined 스타일의 텍스트 입력 컴포넌트
+            </p>
+          </div>
+
+          {/* Basic Input */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Basic Input</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LinedInput
+                label="Placeholder"
+                value={linedInputValue1}
+                onChange={setLinedInputValue1}
+              />
+
+              <LinedInput
+                label="Placeholder"
+                value={linedInputValue2}
+                onChange={setLinedInputValue2}
+              />
+            </div>
+          </div>
+
+          {/* Error State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Error State</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LinedInput
+                label="Email"
+                value={linedInputValue3}
+                onChange={setLinedInputValue3}
+                error="Selection Required"
+              />
+            </div>
+          </div>
+
+          {/* Disabled State */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-h5">Disabled State</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LinedInput label="Placeholder" value="" onChange={() => {}} disabled />
+              <LinedInput
+                label="Placeholder"
+                value="Disabled with value"
+                onChange={() => {}}
+                disabled
+              />
             </div>
           </div>
         </section>
