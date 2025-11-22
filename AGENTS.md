@@ -200,11 +200,11 @@ DATABASE_URL=<postgresql-connection-string>
 Client-side (React components):
 
 ```typescript
-"use client";
-import { authClient } from "@/lib/auth-client";
+'use client';
+import { authClient } from '@/lib/auth-client';
 
 // Google OAuth sign-in
-await authClient.signIn.social({ provider: "google" });
+await authClient.signIn.social({ provider: 'google' });
 
 // Sign out
 await authClient.signOut();
@@ -216,17 +216,17 @@ const { data: session } = authClient.useSession();
 Server-side (Server Components, Route Handlers):
 
 ```typescript
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 // Get session in Server Component
 const session = await auth.api.getSession({
-  headers: await headers()
+  headers: await headers(),
 });
 
 if (!session) {
   // User is not authenticated
-  redirect("/sign-in");
+  redirect('/sign-in');
 }
 
 // Access user data
