@@ -37,9 +37,6 @@ export default function RootLayout({
         <main className="bg-background min-h-screen w-full max-w-[430px] overflow-x-hidden shadow-xl">
           {children}
         </main>
-
-        {/* Navigation */}
-        <DashboardNavigation />
       </body>
     </html>
   );

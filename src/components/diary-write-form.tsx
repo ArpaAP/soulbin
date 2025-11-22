@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Textarea } from '@/components/ui/textarea';
 
 import { Button } from './ui/button';
-import { saveDiary } from '@/app/dashboard/diary/actions';
+import { saveDiary } from '@/app/dashboard/(with-nav)/diary/actions';
 import { IconWrite } from '@/icons';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,11 @@ type DiaryFormData = {
   content: string;
 };
 
-export function DiaryWriteForm() {
+interface DiaryWriteFormProps {
+  userName: string;
+}
+
+export function DiaryWriteForm({ userName }: DiaryWriteFormProps) {
   const router = useRouter();
   const minLength = 10;
 
@@ -37,8 +41,7 @@ export function DiaryWriteForm() {
   const onSubmit = async (data: DiaryFormData) => {
     try {
       await saveDiary(data.content);
-      // Optionally redirect to list or show success message
-      router.push('/dashboard/diary/list');
+      router.push('/dashboard/diary/complete');
     } catch (error) {
       console.error('Failed to save diary:', error);
       alert('일기 저장에 실패했습니다.');
@@ -55,7 +58,7 @@ export function DiaryWriteForm() {
           오늘의 감정을 기록해보세요
         </p>
         <p className="text-b2 text-gray-text tracking-[-0.35px]">
-          AI가 기원님의 감정을 분석하고 맞춤형 조언을 제공해드려요.
+          AI가 {userName}님의 감정을 분석하고 맞춤형 조언을 제공해드려요.
         </p>
       </div>
 
@@ -86,8 +89,8 @@ export function DiaryWriteForm() {
       </div>
 
       <div className="relative flex w-full shrink-0 flex-col items-start gap-3">
-        <div className="flex w-full justify-start">
-          <p className="text-l2 tracking-[-0.28px] text-gray-400">
+        <div className="flex w-full justify-center">
+          <p className="text-l2 tracking-[-0.28px] text-gray-500">
             {currentLength}글자 (최소 {minLength}자)
           </p>
         </div>
@@ -95,11 +98,14 @@ export function DiaryWriteForm() {
           <Button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className={cn('w-full', (!isValid || isSubmitting) && 'cursor-not-allowed bg-gray-400')}
+            className={cn(
+              'w-full',
+              (!isValid || isSubmitting) && 'cursor-not-allowed bg-gray-400 text-white'
+            )}
           >
             <IconWrite size={22} className="text-white" />
             <span className="text-l1 font-medium tracking-[-0.32px]">
-              {isSubmitting ? '저장 중...' : '버리기'}
+              {isSubmitting ? '저장 중...' : '일기 저장'}
             </span>
           </Button>
         </div>

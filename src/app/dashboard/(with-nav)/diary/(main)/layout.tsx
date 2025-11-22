@@ -4,15 +4,15 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export function DiaryTabMenu() {
+function DiaryTabMenu() {
   const pathname = usePathname();
-  const isWrite = pathname === '/dashboard/diary';
+  const isWrite = pathname === '/dashboard/diary/write';
   const isList = pathname === '/dashboard/diary/list';
 
   return (
     <div className="rounded-br3 gap-g2 p-g1 box-border flex w-full shrink-0 items-start overflow-clip bg-white">
       <Link
-        href="/dashboard/diary"
+        href="/dashboard/diary/write"
         className={cn(
           'gap-g3 rounded-br2 relative flex h-11 shrink-0 grow basis-0 content-stretch items-center justify-center',
           isWrite ? 'bg-primary-green' : 'bg-transparent'
@@ -43,6 +43,21 @@ export function DiaryTabMenu() {
           일기 목록
         </p>
       </Link>
+    </div>
+  );
+}
+
+export default function DiaryLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="gap-g2 px-g3 relative flex w-full flex-col items-start py-0">
+      {/* Header */}
+      <div className="pt-g2 px-g2 relative flex h-14 w-full shrink-0 items-center justify-start">
+        <p className="text-h5 font-semibold tracking-[-0.5px] text-black">일기</p>
+      </div>
+
+      <DiaryTabMenu />
+
+      {children}
     </div>
   );
 }

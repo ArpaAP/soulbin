@@ -89,7 +89,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Contents */}
-      <div className="gap-g2 px-g3 py-g0 mx-auto box-border flex w-full max-w-[430px] flex-col content-stretch items-start overflow-clip pb-[120px]">
+      <div className="gap-g2 px-g3 py-g0 mx-auto box-border flex w-full max-w-[430px] flex-col content-stretch items-start overflow-clip">
         {/* 인사 카드 */}
         <div className="bg-dashboard-nav-bg gap-g3 p-g4 rounded-br3 relative box-border flex w-full shrink-0 content-stretch items-center overflow-clip">
           <TossFaceIcon emoji={greetingEmoji()} />
