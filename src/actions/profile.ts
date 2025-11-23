@@ -240,15 +240,12 @@ export async function restoreUserData(data: any) {
 
   // 1. 프로필 복원
   if (data.profile) {
-    const { name, nickname, phoneNumber, birthDate, job, aiStyle } =
-      data.profile;
+    const { name, nickname, phoneNumber, birthDate, job, aiStyle } = data.profile;
 
     let aiStyleEnum: AIStyle = AIStyle.AUTO;
     if (aiStyle === 'auto' || aiStyle === 'AUTO') aiStyleEnum = AIStyle.AUTO;
-    else if (aiStyle === 'cold' || aiStyle === 'COLD')
-      aiStyleEnum = AIStyle.COLD;
-    else if (aiStyle === 'warm' || aiStyle === 'WARM')
-      aiStyleEnum = AIStyle.WARM;
+    else if (aiStyle === 'cold' || aiStyle === 'COLD') aiStyleEnum = AIStyle.COLD;
+    else if (aiStyle === 'warm' || aiStyle === 'WARM') aiStyleEnum = AIStyle.WARM;
 
     let validBirthDate: Date | null = null;
     if (birthDate) {

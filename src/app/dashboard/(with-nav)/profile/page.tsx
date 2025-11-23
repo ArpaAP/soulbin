@@ -19,7 +19,6 @@ import {
   getAllUserData,
   restoreUserData,
 } from '@/actions/profile';
-
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 
@@ -250,16 +249,10 @@ export default function ProfilePage() {
               job: profile.job || '',
             });
             setEmail(profile.email || '');
-            setAiStyle(
-              (profile.aiStyle as string)?.toLowerCase() as AIStyle || 'auto'
-            );
+            setAiStyle(((profile.aiStyle as string)?.toLowerCase() as AIStyle) || 'auto');
           }
 
-          showModal(
-            '가져오기 완료',
-            '데이터를 성공적으로 가져왔습니다!',
-            'success'
-          );
+          showModal('가져오기 완료', '데이터를 성공적으로 가져왔습니다!', 'success');
         }
       } catch (error) {
         console.error('Failed to import data:', error);

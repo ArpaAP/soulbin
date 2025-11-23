@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 
 import logo from '@/assets/logo.png';
+
 import { ChatInput } from './chat-input';
 import { MessageBubble } from './message-bubble';
 import { saveMessage, generateAIResponse } from '@/actions/chat';
 import { MessageRole } from '@/generated/prisma/enums';
+import Image from 'next/image';
 
 interface Message {
   id: string;
@@ -113,9 +114,9 @@ export function ChatRoom({ chatId, initialMessages }: ChatRoomProps) {
               <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white">
                 <Image src={logo} alt="AI Avatar" width={28} height={28} />
               </div>
-              <div className="gap-g1 flex max-w-[250px] items-end flex-row">
-                <div className="px-g3 py-g2 rounded-br3 relative text-black-100 bg-white">
-                  <p className="text-b2 wrap-break-word whitespace-pre-wrap italic text-gray-400">
+              <div className="gap-g1 flex max-w-[250px] flex-row items-end">
+                <div className="px-g3 py-g2 rounded-br3 text-black-100 relative bg-white">
+                  <p className="text-b2 wrap-break-word whitespace-pre-wrap text-gray-400 italic">
                     생각 중...
                   </p>
                 </div>

@@ -340,17 +340,20 @@ import { Button } from '@/components/ui/button';
 **Examples**:
 
 ❌ **Incorrect**:
+
 ```typescript
 <button className="bg-primary-green text-white px-4 py-2">클릭</button>
 ```
 
 ✅ **Correct**:
+
 ```typescript
 import { Button } from '@/components/ui/button';
 <Button>클릭</Button>
 ```
 
 ❌ **Incorrect**:
+
 ```typescript
 // Creating a new button component
 function CustomButton() {
@@ -359,6 +362,7 @@ function CustomButton() {
 ```
 
 ✅ **Correct**:
+
 ```typescript
 // Extending existing Button component
 import { Button } from '@/components/ui/button';
@@ -404,11 +408,13 @@ import TossFaceIcon from '@/components/TossFaceIcon';
 **IMPORTANT**: Do NOT use plain emoji characters directly in JSX. Always wrap them with `TossFaceIcon`.
 
 ❌ **Incorrect**:
+
 ```typescript
 <div>😀 안녕하세요</div>
 ```
 
 ✅ **Correct**:
+
 ```typescript
 <div>
   <TossFaceIcon emoji="😀" /> 안녕하세요
@@ -586,10 +592,10 @@ src/
 // src/actions/diary.ts
 'use server';
 
-import prisma from '@/lib/prisma';
 import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
 export async function createDiary(formData: FormData) {
   // 1. Authentication check
@@ -715,7 +721,9 @@ export default function DiaryPage() {
 ```typescript
 'use server';
 
-import { z } from 'zod'; // Optional: Use Zod for validation
+import { z } from 'zod';
+
+// Optional: Use Zod for validation
 
 const diarySchema = z.object({
   content: z.string().min(1, '내용을 입력해주세요'),

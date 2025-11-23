@@ -4,28 +4,24 @@ interface AlertModalProps {
   onClose: () => void;
 }
 
-export default function AlertModal({
-  title,
-  description,
-  onClose,
-}: AlertModalProps) {
+export default function AlertModal({ title, description, onClose }: AlertModalProps) {
   return (
-    <div className="bg-[rgba(0,0,0,0.5)] fixed inset-0 z-50 flex content-stretch flex-col gap-[10px] items-center justify-center">
-      <div className="bg-white box-border content-stretch flex flex-col gap-[10px] items-center p-g3 relative rounded-br3 shrink-0 w-[350px]">
-        <div className="box-border content-stretch flex flex-col gap-g2 items-center leading-[0] px-0 py-g7 relative shrink-0 text-nowrap">
-          <div className="flex flex-col font-semibold justify-center relative shrink-0 text-black text-h6 text-nowrap not-italic">
+    <div className="fixed inset-0 z-50 flex flex-col content-stretch items-center justify-center gap-[10px] bg-[rgba(0,0,0,0.5)]">
+      <div className="p-g3 rounded-br3 relative box-border flex w-[350px] shrink-0 flex-col content-stretch items-center gap-[10px] bg-white">
+        <div className="gap-g2 py-g7 relative box-border flex shrink-0 flex-col content-stretch items-center px-0 leading-[0] text-nowrap">
+          <div className="text-h6 relative flex shrink-0 flex-col justify-center font-semibold text-nowrap text-black not-italic">
             <p className="whitespace-pre">{title}</p>
           </div>
-          <div className="flex flex-col font-normal justify-center relative shrink-0 text-grey-300 text-c1 text-nowrap not-italic">
+          <div className="text-grey-300 text-c1 relative flex shrink-0 flex-col justify-center font-normal text-nowrap not-italic">
             <p className="whitespace-pre">{description}</p>
           </div>
         </div>
-        <div className="content-stretch flex gap-g2 items-center justify-center relative shrink-0 w-full">
+        <div className="gap-g2 relative flex w-full shrink-0 content-stretch items-center justify-center">
           <button
             onClick={onClose}
-            className="basis-0 box-border content-stretch flex gap-[10px] grow h-[48px] items-center justify-center min-h-px min-w-px overflow-clip px-g5 py-g0 relative rounded-br2 shrink-0 bg-[#1e90ff] transition-all hover:opacity-90 active:scale-95"
+            className="px-g5 py-g0 rounded-br2 relative box-border flex h-[48px] min-h-px min-w-px shrink-0 grow basis-0 content-stretch items-center justify-center gap-[10px] overflow-clip bg-[#1e90ff] transition-all hover:opacity-90 active:scale-95"
           >
-            <div className="flex flex-col font-medium justify-center leading-[0] relative shrink-0 text-white text-l1 text-center text-nowrap not-italic">
+            <div className="text-l1 relative flex shrink-0 flex-col justify-center text-center leading-[0] font-medium text-nowrap text-white not-italic">
               <p className="whitespace-pre">닫기</p>
             </div>
           </button>
