@@ -1,5 +1,7 @@
 # 함수달 - 설빈(SoulBin)
 
+[서비스 사용해보기](https://soulbin.arpaap.dev/)
+
 ## 서비스 요약
 
 설빈(SoulBin)은 AI 기반 감정 케어 플랫폼으로, 일기 작성 또는 AI 상담 채팅을 통해 자신의 심리 상태를 기록하고 분석할 수 있는 서비스입니다. LLM을 활용하여 사용자의 감정을 분석하고, 맞춤형 조언과 시각화된 감정 통계를 제공합니다.
@@ -157,12 +159,37 @@ https://www.youtube.com/shorts/wgDE258V5lw
 
 **핵심 구현 기술**
 
+**1. Next.js 기반 풀스택 웹**
+
+- React 19.2 + React Compiler로 자동 성능 최적화
+- Next.js 16의 Server Components 및 Server Actions 아키텍처
+- after() API를 활용한 비동기 백그라운드 LLM 처리(일기 분석 등)
+
+**2. 디자인 시스템**
+
+- Tailwind CSS v4 기반 커스텀 디자인 시스템 구축
+- Figma MCP 통합으로 디자인-코드 동기화
+- 체계적인 spacing/typography/color 변수 관리
+- 직접 디자인한 커스텀 SVG 아이콘셋 및 Toss Face 스타일 이모지 컴포넌트
+
+**3. AI 워크플로우 구축**
+
+- LangChain + Structured Output Parser로 타입 안전한 AI 응답 처리
+- Zod 스키마 기반 런타임 검증
+- 컨텍스트 인식 감정 분석 파이프라인
+
+**4. Server Actions 기반 아키텍처**
+
 - Server-side data fetching으로 빠른 초기 로딩 속성 제공
 - Next.js Server Actions를 활용한 빠르고 효율적인 서버-클라이언트 통신 구현
+- React Hook Form과 통합된 폼 처리
+- 자동 캐시 revalidation
+
+**5. 성능 최적화**
+
+- Server-side data fetching 및 Streaming
 - Suspense 및 Loading UI를 활용한 점진적 렌더링
-- 데이터베이스 인덱싱으로 쿼리 성능 최적화, Prisma의 ORM을 활용한 스키마 관리
-- 일기 분석 시 Next.js의 `after()` API를 활용하여 LLM API 통신 등의 비동기 백그라운드 작업 처리
-- 직접 디자인한 커스텀 SVG 아이콘셋 및 Toss Face 스타일 이모지 컴포넌트
+- Database indexing 및 쿼리 최적화, Prisma의 ORM을 활용한 스키마 관리
 
 ## 향후 개선 혹은 발전 방안
 
