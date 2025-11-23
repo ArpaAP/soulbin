@@ -1,6 +1,6 @@
 'use server';
 
-import { processChatAction } from './openai';
+import { processChatAction, generateChatTitleAction } from './openai';
 import { MessageRole } from '@/generated/prisma/enums';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
@@ -166,10 +166,26 @@ export async function saveMessage(chatId: string, content: string, role: Message
       },
     });
 
-    // Update chat's updatedAt timestamp
+    // If this is the first user message, generate and update title
+    let titleUpdate = {};
+    if (role === 'USER') {
+      const messageCount = await prisma.message.count({
+        where: { chatId },
+      });
+
+      if (messageCount === 1) {
+        const title = await generateChatTitleAction(content);
+        titleUpdate = { title };
+      }
+    }
+
+    // Update chat's updatedAt timestamp and optionally title
     await prisma.chat.update({
       where: { id: chatId },
-      data: { updatedAt: new Date() },
+      data: {
+        updatedAt: new Date(),
+        ...titleUpdate,
+      },
     });
 
     revalidatePath(`/dashboard/chat/${chatId}`);

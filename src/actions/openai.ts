@@ -268,3 +268,36 @@ export async function processChatAction(chatId: string) {
     return '죄송합니다. 잠시 후 다시 시도해주세요.';
   }
 }
+
+/**
+ * 채팅 제목 생성 함수
+ */
+export async function generateChatTitleAction(firstMessage: string) {
+  if (!API_KEY) throw new Error('OpenAI API 키가 설정되지 않았습니다.');
+
+  const model = createModel(0.5);
+
+  const prompt = new PromptTemplate({
+    template: `사용자의 첫 번째 메시지를 바탕으로 채팅방의 제목을 생성해주세요.
+제목은 다음 조건을 만족해야 합니다:
+1. 20자 이내로 짧고 간결하게
+2. 대화의 핵심 주제를 반영
+3. 이모지 1개 포함 (선택사항)
+4. 따옴표 없이 텍스트만 반환
+
+사용자 메시지: {text}`,
+    inputVariables: ['text'],
+  });
+
+  try {
+    const chain = prompt.pipe(model);
+    const response = await chain.invoke({ text: firstMessage });
+
+    return typeof response.content === 'string'
+      ? response.content.trim()
+      : String(response.content);
+  } catch (error) {
+    console.error('채팅 제목 생성 실패:', error);
+    return '새로운 상담';
+  }
+}
