@@ -114,6 +114,7 @@ export function AnalysisDashboard({ data }: { data: AnalysisData }) {
               nameKey="emotion"
               innerRadius={50}
               strokeWidth={5}
+              animationDuration={500}
               label={({ name }) => name}
             >
               {data.pieData.map((entry, index) => (
