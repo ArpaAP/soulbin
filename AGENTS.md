@@ -427,6 +427,309 @@ reset();
 setValue('fieldName', 'newValue');
 ```
 
+## Server Actions
+
+### Next.js Server Actions
+
+This project **prioritizes the use of Next.js Server Actions** for server-side operations instead of traditional API routes.
+
+**IMPORTANT**: Always prefer Server Actions over API routes (`/api/*`) for server-side logic, database operations, and mutations.
+
+**What are Server Actions?**
+
+Server Actions are asynchronous functions that run on the server and can be called directly from Client Components or Server Components. They provide a seamless way to handle server-side logic without creating separate API endpoints.
+
+**File Structure**:
+
+```
+src/
+├── actions/              # Server Actions (grouped by domain)
+│   ├── auth.ts          # Authentication actions
+│   ├── diary.ts         # Diary-related actions
+│   └── user.ts          # User-related actions
+└── app/
+    └── ...
+```
+
+**Basic Usage Pattern**:
+
+```typescript
+// src/actions/diary.ts
+'use server';
+
+import prisma from '@/lib/prisma';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import { revalidatePath } from 'next/cache';
+
+export async function createDiary(formData: FormData) {
+  // 1. Authentication check
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return { error: '로그인이 필요합니다' };
+  }
+
+  // 2. Data validation
+  const content = formData.get('content') as string;
+  if (!content || content.trim().length === 0) {
+    return { error: '내용을 입력해주세요' };
+  }
+
+  // 3. Database operation
+  try {
+    const diary = await prisma.diary.create({
+      data: {
+        content,
+        userId: session.user.id,
+      },
+    });
+
+    // 4. Revalidate cached data
+    revalidatePath('/dashboard/diary');
+
+    return { success: true, diary };
+  } catch (error) {
+    console.error('Diary creation error:', error);
+    return { error: '일기 작성 중 오류가 발생했습니다' };
+  }
+}
+```
+
+**Using Server Actions in Client Components**:
+
+```typescript
+'use client';
+
+import { createDiary } from '@/actions/diary';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+
+export function DiaryForm() {
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (data: FormData) => {
+    const formData = new FormData();
+    formData.append('content', data.content);
+
+    const result = await createDiary(formData);
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      // Success handling
+      setError(null);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <textarea {...register('content')} />
+      {error && <p className="text-error">{error}</p>}
+      <button type="submit">작성</button>
+    </form>
+  );
+}
+```
+
+**Using Server Actions with FormData (Progressive Enhancement)**:
+
+```typescript
+'use client';
+
+import { createDiary } from '@/actions/diary';
+import { useFormState, useFormStatus } from 'react-dom';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? '작성 중...' : '작성'}
+    </button>
+  );
+}
+
+export function DiaryForm() {
+  const [state, formAction] = useFormState(createDiary, null);
+
+  return (
+    <form action={formAction}>
+      <textarea name="content" required />
+      {state?.error && <p className="text-error">{state.error}</p>}
+      <SubmitButton />
+    </form>
+  );
+}
+```
+
+**Server Actions in Server Components**:
+
+```typescript
+// src/app/dashboard/diary/page.tsx
+import { createDiary } from '@/actions/diary';
+
+export default function DiaryPage() {
+  return (
+    <form action={createDiary}>
+      <textarea name="content" required />
+      <button type="submit">작성</button>
+    </form>
+  );
+}
+```
+
+**TypeScript Type Safety**:
+
+```typescript
+'use server';
+
+import { z } from 'zod'; // Optional: Use Zod for validation
+
+const diarySchema = z.object({
+  content: z.string().min(1, '내용을 입력해주세요'),
+  mood: z.enum(['happy', 'sad', 'angry', 'neutral']),
+});
+
+type DiaryInput = z.infer<typeof diarySchema>;
+
+export async function createDiary(input: DiaryInput) {
+  // Validate input
+  const validated = diarySchema.safeParse(input);
+
+  if (!validated.success) {
+    return { error: validated.error.errors[0].message };
+  }
+
+  // ... rest of the implementation
+}
+```
+
+**Best Practices**:
+
+1. **Always use 'use server' directive**: Place at the top of the file or individual function
+2. **Authentication**: Always verify user authentication in Server Actions
+3. **Validation**: Validate all input data before processing
+4. **Error Handling**: Return error objects instead of throwing errors
+5. **Type Safety**: Use TypeScript types for input and return values
+6. **Revalidation**: Use `revalidatePath()` or `revalidateTag()` to update cached data
+7. **File Organization**: Group related actions in domain-specific files (auth.ts, diary.ts, etc.)
+8. **Response Pattern**: Return consistent response objects (`{ success: boolean, data?: T, error?: string }`)
+9. **Progressive Enhancement**: Use `useFormState` and `useFormStatus` for better UX
+10. **Avoid API Routes**: Only create API routes for webhooks, external integrations, or non-form submissions
+
+**Common Patterns**:
+
+```typescript
+// Pattern 1: Mutation with revalidation
+export async function updateUser(userId: string, data: UpdateUserInput) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session || session.user.id !== userId) {
+    return { error: '권한이 없습니다' };
+  }
+
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data,
+  });
+
+  revalidatePath('/dashboard/profile');
+  return { success: true, user };
+}
+
+// Pattern 2: Delete with redirect
+export async function deleteDiary(diaryId: string) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    return { error: '로그인이 필요합니다' };
+  }
+
+  await prisma.diary.delete({
+    where: {
+      id: diaryId,
+      userId: session.user.id, // Ensure user owns the diary
+    },
+  });
+
+  revalidatePath('/dashboard/diary');
+  redirect('/dashboard/diary');
+}
+
+// Pattern 3: Data fetching (prefer Server Components, but allowed for client-side fetching)
+export async function getDiaryList(page: number = 1) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    return { error: '로그인이 필요합니다' };
+  }
+
+  const diaries = await prisma.diary.findMany({
+    where: { userId: session.user.id },
+    orderBy: { createdAt: 'desc' },
+    skip: (page - 1) * 10,
+    take: 10,
+  });
+
+  return { success: true, diaries };
+}
+```
+
+**When NOT to use Server Actions**:
+
+- **Webhooks**: Use API routes for external service callbacks
+- **RESTful APIs**: Use API routes when building public APIs
+- **Real-time endpoints**: Use API routes with streaming or WebSocket
+- **Third-party integrations**: Use API routes when external services need to call your endpoints
+
+**Integration with React Hook Form**:
+
+```typescript
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { createDiary } from '@/actions/diary';
+import { useState, useTransition } from 'react';
+
+type FormData = {
+  content: string;
+  mood: string;
+};
+
+export function DiaryForm() {
+  const { register, handleSubmit, reset } = useForm<FormData>();
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const onSubmit = async (data: FormData) => {
+    startTransition(async () => {
+      const result = await createDiary(data);
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setError(null);
+        reset(); // Clear form on success
+      }
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <textarea {...register('content', { required: true })} />
+      <select {...register('mood')}>
+        <option value="happy">행복</option>
+        <option value="sad">슬픔</option>
+      </select>
+      {error && <p className="text-error">{error}</p>}
+      <button type="submit" disabled={isPending}>
+        {isPending ? '작성 중...' : '작성'}
+      </button>
+    </form>
+  );
+}
+```
+
 ## Import Order (Prettier)
 
 Imports are automatically sorted by Prettier in this order:
