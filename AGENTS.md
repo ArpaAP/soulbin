@@ -288,6 +288,135 @@ Components use:
 - **Slot pattern** from @radix-ui/react-slot for polymorphic components
 - **Custom design tokens** from `globals.css` instead of Shadcn defaults
 
+### Component Reuse
+
+**CRITICAL**: Always use existing UI components from `src/components/ui/` instead of creating new ones or using native HTML elements.
+
+**Available Components**:
+
+- **Button** (`src/components/ui/button.tsx`): For all button elements
+- **Select** (`src/components/ui/select.tsx`): Base select component
+- **OutlinedSelect** (`src/components/ui/outlined-select.tsx`): Outlined variant select
+- **LinedSelect** (`src/components/ui/lined-select.tsx`): Lined variant select
+
+**Button Component Usage**:
+
+```typescript
+import { Button } from '@/components/ui/button';
+
+// Variants: flat (default), outline, destructive, secondary, ghost, link
+// Sizes: default, sm, lg, icon, icon-sm, icon-lg
+
+// Basic usage (flat variant, default size)
+<Button>클릭</Button>
+
+// With variants
+<Button variant="outline">취소</Button>
+<Button variant="destructive">삭제</Button>
+
+// With sizes
+<Button size="sm">작은 버튼</Button>
+<Button size="lg">큰 버튼</Button>
+
+// Icon button
+<Button variant="outline" size="icon">
+  <Icon />
+</Button>
+
+// As child (polymorphic)
+<Button asChild>
+  <a href="/link">링크 버튼</a>
+</Button>
+```
+
+**IMPORTANT Rules**:
+
+1. ❌ **NEVER** create new button components or use native `<button>` elements directly
+2. ❌ **NEVER** create new select components when variants exist
+3. ✅ **ALWAYS** use `Button` component from `@/components/ui/button`
+4. ✅ **ALWAYS** check `src/components/ui/` for existing components before creating new ones
+5. ✅ **ALWAYS** extend existing components using `className` prop if additional styling is needed
+
+**Examples**:
+
+❌ **Incorrect**:
+```typescript
+<button className="bg-primary-green text-white px-4 py-2">클릭</button>
+```
+
+✅ **Correct**:
+```typescript
+import { Button } from '@/components/ui/button';
+<Button>클릭</Button>
+```
+
+❌ **Incorrect**:
+```typescript
+// Creating a new button component
+function CustomButton() {
+  return <button className="custom-styles">...</button>;
+}
+```
+
+✅ **Correct**:
+```typescript
+// Extending existing Button component
+import { Button } from '@/components/ui/button';
+<Button className="additional-custom-styles">...</Button>
+```
+
+### Emoji and Icon Usage
+
+**CRITICAL**: When using emojis in the application, **always use the `TossFaceIcon` component** instead of plain emoji characters.
+
+**File Location**: `src/components/TossFaceIcon.tsx`
+
+**Usage Pattern**:
+
+```typescript
+import TossFaceIcon from '@/components/TossFaceIcon';
+
+// Basic usage (32px default size)
+<TossFaceIcon emoji="😀" />
+
+// Custom size
+<TossFaceIcon emoji="😀" size={48} />
+
+// In buttons or other components
+<button>
+  <TossFaceIcon emoji="❤️" size={24} />
+  좋아요
+</button>
+```
+
+**Component Props**:
+
+- `emoji` (required): The emoji character to display
+- `size` (optional): Size in pixels (default: 32)
+
+**Why TossFaceIcon?**:
+
+- Consistent emoji rendering across all platforms and browsers
+- Uses Toss Face font for unified emoji design
+- Better control over emoji sizing and spacing
+- Prevents platform-specific emoji variations
+
+**IMPORTANT**: Do NOT use plain emoji characters directly in JSX. Always wrap them with `TossFaceIcon`.
+
+❌ **Incorrect**:
+```typescript
+<div>😀 안녕하세요</div>
+```
+
+✅ **Correct**:
+```typescript
+<div>
+  <TossFaceIcon emoji="😀" /> 안녕하세요
+</div>
+```
+
+For non-emoji icons (UI icons, symbols, etc.), use **lucide-react** as specified in the Tech Stack.
+
 ## Form Management
 
 ### React Hook Form
