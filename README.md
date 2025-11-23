@@ -53,7 +53,7 @@ https://www.youtube.com/shorts/wgDE258V5lw
 
 ![일기 작성 화면](.github/images/03.%20diary-write.png)
 
-- 사용자가 작성한 일기를 OpenAI GPT-4를 활용하여 자동 분석
+- 사용자가 작성한 일기를 OpenAI GPT-4o-mini를 활용하여 자동 분석
 - 감정 상태(예: 불안, 기쁨, 슬픔, 분노 등), 강도(1-10 스케일), 관련 태그, 한 줄 요약 추출
 - 사용자의 AI 스타일 설정(AUTO, COLD, WARM)에 따른 맞춤형 조언 제공
 
