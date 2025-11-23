@@ -17,7 +17,7 @@
 
 ## 시연 영상
 
-[![Video Label](http://img.youtube.com/vi/wgDE258V5lw/0.jpg)](https://www.youtube.com/shorts/wgDE258V5lw)
+https://www.youtube.com/shorts/wgDE258V5lw
 
 ## 서비스 소개
 
@@ -26,8 +26,6 @@
 ![서비스 메인 화면](.github/images/01.%20Main%20Screen.png)
 
 설빈(Soul Bin)은 AI 기반 감정 케어 플랫폼으로, 사용자가 일기 작성 또는 AI 상담 채팅 두 가지 형식 중 하나를 선택해 자신의 심리 상태를 기록하고 분석할 수 있는 서비스입니다. 사용자가 작성한 일기 내용이나 AI와 주고받은 상담 대화를 자연어 처리 AI가 분석하여 현재 감정 상태(예: 불안, 우울, 평온 등)와 성격 경향을 추론합니다. 이러한 분석 결과는 일별 감정 변화 추이, 감정 분포 그래프 등으로 시각화되어 제공되며, 이를 바탕으로 사용자에게 맞춤형 피드백을 제시해줍니다.
-
-![서비스 플로우](.github/images/02.%20Service%20Flow.png)
 
 현대 사회에서는 '정신병'이라는 단어에 대한 부정적 인식 때문에 자신의 정신 상태를 솔직하게 파악하고 인정하기 어려운 분위기가 있습니다. 사실 많은 정신적 어려움이 뇌와 몸의 화학 작용 등 다양한 요인으로 인해 발생하지만, 사람들은 이를 마음이 약해졌다고 여기며 부정하거나 숨기는 경향이 있습니다. 설빈(Soul Bin)은 이러한 문제를 해결하기 위해, 사용자가 모르는 사이 누적된 감정의 흐름과 패턴을 눈으로 볼 수 있게 시각화하여 심리적 고통을 인지하도록 돕고 그에 대한 작은 해결책을 제공합니다. 이를 통해 사용자는 자신의 스트레스와 감정적 고통을 객관적으로 받아들이고, 이를 해소하기 위한 첫 걸음을 뗄 수 있게 됩니다.
 
@@ -103,14 +101,18 @@
 
 #### Summary
 
-> Design: **Figma**  
-> FE/BE: **Next.js 16.0** (with React 19.2 + TypeScript)  
-> UI Framework: **Radix UI + Tailwind CSS v4**  
-> Database: **PostgreSQL**  
-> ORM: **Prisma**  
-> Deploy: **Vercel**
->
-> 기타 상세 스택은 아래 참조
+- Design: **Figma**
+- FE/BE: **Next.js 16.0** (with React 19.2 + TypeScript)
+- UI Framework: **Radix UI + Tailwind CSS v4**
+- Database: **PostgreSQL**
+- ORM: **Prisma**
+- Deploy: **Vercel**
+
+기타 상세 스택은 아래 참조
+
+#### 서비스 플로우 - Flow
+
+![서비스 플로우](.github/images/02.%20Service%20Flow.png)
 
 #### 시스템 아키텍처 - Stacks
 
