@@ -192,7 +192,6 @@ export function RegistrationForm() {
     } catch (error) {
       console.error('Registration error:', error);
       alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -215,7 +214,7 @@ export function RegistrationForm() {
           transition={{ duration: 0.3 }}
           className="w-full"
         >
-          <AIStyleSelection onComplete={handleAIStyleComplete} />
+          <AIStyleSelection onComplete={handleAIStyleComplete} isSubmitting={isSubmitting} />
         </motion.div>
       ) : (
         <motion.div
@@ -235,7 +234,7 @@ export function RegistrationForm() {
               <h1 className="text-h3">사용자님의</h1>
               <h1 className="text-h3">추가 정보가 필요해요</h1>
             </div>
-            <p className="text-b1 text-[#797979]">원활한 사용을 위해 다음 정보들을 입력해주세요</p>
+            <p className="text-b1 text-grey-300">원활한 사용을 위해 다음 정보들을 입력해주세요</p>
           </div>
 
           {/* Content */}

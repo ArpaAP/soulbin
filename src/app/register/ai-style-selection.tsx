@@ -9,6 +9,7 @@ type AIStyleType = 'AUTO' | 'COLD' | 'WARM' | null;
 
 interface AIStyleSelectionProps {
   onComplete: (aiStyle: AIStyleType) => void;
+  isSubmitting?: boolean;
 }
 
 const aiStyleOptions = [
@@ -32,7 +33,7 @@ const aiStyleOptions = [
   },
 ];
 
-export function AIStyleSelection({ onComplete }: AIStyleSelectionProps) {
+export function AIStyleSelection({ onComplete, isSubmitting = false }: AIStyleSelectionProps) {
   const [selectedStyle, setSelectedStyle] = useState<AIStyleType | null>(null);
 
   const selectedOption = aiStyleOptions.find((opt) => opt.value === selectedStyle);
@@ -119,8 +120,13 @@ export function AIStyleSelection({ onComplete }: AIStyleSelectionProps) {
 
       {/* Bottom Button */}
       <div className="p-g5 mt-auto">
-        <Button onClick={handleNext} disabled={!selectedStyle} className="w-full" size="default">
-          완료
+        <Button
+          onClick={handleNext}
+          disabled={!selectedStyle || isSubmitting}
+          className="w-full"
+          size="default"
+        >
+          {isSubmitting ? '처리 중...' : '완료'}
         </Button>
       </div>
     </div>
