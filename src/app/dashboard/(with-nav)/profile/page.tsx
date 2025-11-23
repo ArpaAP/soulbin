@@ -1,16 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
-import ProfileCard from '@/components/profile/ProfileCard';
+
 import AIStyleSelector from '@/components/profile/AIStyleSelector';
-import ProfileForm from '@/components/profile/ProfileForm';
-import UsageStats from '@/components/profile/UsageStats';
-import DataManagement from '@/components/profile/DataManagement';
 import AlertModal from '@/components/profile/AlertModal';
 import ConfirmModal from '@/components/profile/ConfirmModal';
+import DataManagement from '@/components/profile/DataManagement';
 import LoadingScreen from '@/components/profile/LoadingScreen';
+import ProfileCard from '@/components/profile/ProfileCard';
+import ProfileForm from '@/components/profile/ProfileForm';
+import UsageStats from '@/components/profile/UsageStats';
+
+import {
+  getProfile,
+  updateProfile,
+  deleteProfileData,
+  getProfileStats,
+  getAllUserData,
+  restoreUserData,
+} from '@/actions/profile';
+
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 type AIStyle = 'auto' | 'cold' | 'warm';
 
@@ -66,29 +77,26 @@ export default function ProfilePage() {
       if (!session?.user) return;
 
       try {
-        const response = await fetch('/api/profile');
-        if (response.ok) {
-          const data = await response.json();
+        const data = await getProfile();
 
-          setEmail(data.email || '');
-          setFormData({
-            name: data.name || '',
-            nickname: data.nickname || '',
-            phone: data.phoneNumber || '',
-            birthday: data.birthDate
-              ? new Date(data.birthDate).toLocaleDateString('ko-KR', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })
-              : '',
-            job: data.job || '',
-          });
+        setEmail(data.email || '');
+        setFormData({
+          name: data.name || '',
+          nickname: data.nickname || '',
+          phone: data.phoneNumber || '',
+          birthday: data.birthDate
+            ? new Date(data.birthDate).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })
+            : '',
+          job: data.job || '',
+        });
 
-          // aiStyle enum을 lowercase로 변환
-          const aiStyleValue = data.aiStyle?.toLowerCase() || 'auto';
-          setAiStyle(aiStyleValue as AIStyle);
-        }
+        // aiStyle enum을 lowercase로 변환
+        const aiStyleValue = (data.aiStyle as string)?.toLowerCase() || 'auto';
+        setAiStyle(aiStyleValue as AIStyle);
       } catch (error) {
         console.error('Failed to load profile from API:', error);
       }
@@ -103,11 +111,8 @@ export default function ProfilePage() {
       if (!session?.user) return;
 
       try {
-        const response = await fetch('/api/profile/stats');
-        if (response.ok) {
-          const data = await response.json();
-          setUsageStats(data);
-        }
+        const data = await getProfileStats();
+        setUsageStats(data);
       } catch (error) {
         console.error('Failed to load usage stats:', error);
       }
@@ -134,36 +139,32 @@ export default function ProfilePage() {
       // 생년월일 포맷 변환 (YYYY. MM. DD -> YYYY-MM-DD)
       let birthDateISO = null;
       if (formData.birthday) {
-        const cleanedDate = formData.birthday
-          .replace(/\s/g, '')
-          .replace(/\./g, '-');
-        birthDateISO = cleanedDate;
+        // 공백 제거
+        let cleaned = formData.birthday.replace(/\s/g, '');
+        // 마지막 점 제거 (예: 2000.01.01. -> 2000.01.01)
+        if (cleaned.endsWith('.')) {
+          cleaned = cleaned.slice(0, -1);
+        }
+        // 점을 하이픈으로 변경
+        const cleanedDate = cleaned.replace(/\./g, '-');
+
+        // 날짜 유효성 확인
+        const date = new Date(cleanedDate);
+        if (!isNaN(date.getTime())) {
+          birthDateISO = cleanedDate;
+        }
       }
 
-      const response = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          nickname: formData.nickname,
-          phoneNumber: formData.phone,
-          birthDate: birthDateISO,
-          job: formData.job,
-          aiStyle,
-        }),
+      await updateProfile({
+        name: formData.name,
+        nickname: formData.nickname,
+        phoneNumber: formData.phone,
+        birthDate: birthDateISO,
+        job: formData.job,
+        aiStyle,
       });
 
-      if (response.ok) {
-        showModal(
-          '저장이 완료되었어요',
-          '새로운 프로필로 적용되어 분석합니다',
-          'success'
-        );
-      } else {
-        showModal('저장 실패', '프로필 저장에 실패했습니다.', 'error');
-      }
+      showModal('저장이 완료되었어요', '새로운 프로필로 적용되어 분석합니다', 'success');
     } catch (error) {
       console.error('Failed to save profile:', error);
       showModal('저장 실패', '프로필 저장에 실패했습니다.', 'error');
@@ -233,11 +234,7 @@ export default function ProfilePage() {
             setEmail(profile.email || '');
             setAiStyle(profile.aiStyle || 'auto');
 
-            showModal(
-              '가져오기 완료',
-              '데이터를 성공적으로 가져왔습니다!',
-              'success'
-            );
+            showModal('가져오기 완료', '데이터를 성공적으로 가져왔습니다!', 'success');
           }
         }
       } catch (error) {
@@ -251,24 +248,18 @@ export default function ProfilePage() {
   // 모든 데이터 삭제
   const handleDeleteAllData = async () => {
     try {
-      const response = await fetch('/api/profile', {
-        method: 'DELETE',
-      });
+      await deleteProfileData();
 
-      if (response.ok) {
-        setFormData({
-          name: '',
-          nickname: '',
-          phone: '',
-          birthday: '',
-          job: '',
-        });
-        setAiStyle('auto');
-        setShowDeleteModal(false);
-        showModal('삭제 완료', '모든 데이터가 삭제되었습니다.', 'success');
-      } else {
-        showModal('삭제 실패', '데이터 삭제에 실패했습니다.', 'error');
-      }
+      setFormData({
+        name: '',
+        nickname: '',
+        phone: '',
+        birthday: '',
+        job: '',
+      });
+      setAiStyle('auto');
+      setShowDeleteModal(false);
+      showModal('삭제 완료', '모든 데이터가 삭제되었습니다.', 'success');
     } catch (error) {
       console.error('Failed to delete data:', error);
       showModal('삭제 실패', '데이터 삭제에 실패했습니다.', 'error');
@@ -296,11 +287,7 @@ export default function ProfilePage() {
     } catch (error) {
       console.error('Logout failed:', error);
       setShowLoading(false);
-      showModal(
-        '로그아웃 실패',
-        '로그아웃 처리 중 오류가 발생했습니다.',
-        'error'
-      );
+      showModal('로그아웃 실패', '로그아웃 처리 중 오류가 발생했습니다.', 'error');
     }
   };
 
@@ -308,7 +295,7 @@ export default function ProfilePage() {
     <div className="bg-bg relative min-h-screen w-full">
       {/* GNB */}
       <div className="bg-bg px-g5 mx-auto box-border flex h-[56px] w-full max-w-[430px] content-stretch items-center gap-[10px] overflow-clip py-[10px]">
-        <p className="text-black-200 relative shrink-0 text-center text-h5 font-semibold text-nowrap whitespace-pre not-italic">
+        <p className="text-black-200 text-h5 relative shrink-0 text-center font-semibold text-nowrap whitespace-pre not-italic">
           내 프로필
         </p>
       </div>
@@ -327,11 +314,7 @@ export default function ProfilePage() {
         <AIStyleSelector value={aiStyle} onChange={setAiStyle} />
 
         {/* 내 정보 */}
-        <ProfileForm
-          formData={formData}
-          onChange={handleInputChange}
-          onSave={handleSaveProfile}
-        />
+        <ProfileForm formData={formData} onChange={handleInputChange} onSave={handleSaveProfile} />
 
         {/* 사용 통계 */}
         <UsageStats stats={usageStats} />

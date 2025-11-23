@@ -1,5 +1,5 @@
-import { OutlinedInput } from '@/components/ui/outlined-input';
 import { Button } from '@/components/ui/button';
+import { OutlinedInput } from '@/components/ui/outlined-input';
 
 interface ProfileFormData {
   name: string;
@@ -15,14 +15,10 @@ interface ProfileFormProps {
   onSave: () => void;
 }
 
-export default function ProfileForm({
-  formData,
-  onChange,
-  onSave,
-}: ProfileFormProps) {
+export default function ProfileForm({ formData, onChange, onSave }: ProfileFormProps) {
   return (
     <div className="gap-g6 p-g4 rounded-br3 relative box-border flex w-full shrink-0 flex-col content-stretch items-start overflow-clip bg-white">
-      <p className="relative shrink-0 text-h6 font-semibold text-black text-nowrap whitespace-pre not-italic">
+      <p className="text-h6 relative shrink-0 font-semibold text-nowrap whitespace-pre text-black not-italic">
         내 정보
       </p>
       <div className="relative flex w-full shrink-0 flex-col gap-[24px]">
@@ -54,8 +50,9 @@ export default function ProfileForm({
       </div>
       <div className="gap-g2 relative flex w-full shrink-0 content-stretch items-center justify-center">
         <Button
+          variant="flat"
           onClick={onSave}
-          className="h-[48px] min-h-px min-w-px shrink-0 grow basis-0 text-l1 active:scale-95 transition-all"
+          className="text-l1 min-h-px min-w-px shrink-0 grow basis-0 text-white transition-all active:scale-95"
         >
           수정하기
         </Button>
