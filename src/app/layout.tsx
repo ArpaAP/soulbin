@@ -15,6 +15,10 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: 'SoulBin',
   description: 'AI 기반 감정분석 채팅 서비스',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export const viewport: Viewport = {

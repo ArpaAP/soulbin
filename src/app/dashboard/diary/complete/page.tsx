@@ -16,7 +16,7 @@ export default async function DiaryCompletePage() {
   }
 
   return (
-    <div className="fixed top-0 left-1/2 z-50 h-full w-full max-w-[430px] -translate-x-1/2 overflow-hidden bg-white">
+    <div className="bg-bg fixed top-0 left-1/2 z-50 h-full w-full max-w-[430px] -translate-x-1/2 overflow-hidden">
       <div className="gap-g6 p-g8 absolute top-1/2 left-1/2 box-border flex w-full max-w-[402px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center">
         <TossFaceIcon emoji="🎯" size={115} />
         <div className="gap-g3 relative flex w-full max-w-[338px] shrink-0 flex-col items-center justify-center text-center text-nowrap">
@@ -36,7 +36,9 @@ export default async function DiaryCompletePage() {
       <div className="gap-g2 p-g5 absolute bottom-[34px] left-1/2 box-border flex w-full max-w-[402px] -translate-x-1/2 items-center justify-center">
         <div className="gap-g2 flex w-full">
           <Link className="w-full" href="/dashboard">
-            <Button className="w-full">돌아가기</Button>
+            <Button variant="outline" className="w-full">
+              돌아가기
+            </Button>
           </Link>
           <Link className="w-full" href="/dashboard/diary/write">
             <Button className="w-full">다른 일기 쓰기</Button>
