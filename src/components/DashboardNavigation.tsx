@@ -40,7 +40,7 @@ export function DashboardNavigation() {
 
   const navItems = [
     { href: '/dashboard', icon: <IconHome size={24} />, label: '홈' },
-    { href: '/dashboard/diary', icon: <IconWrite size={24} />, label: '일기' },
+    { href: '/dashboard/diary/write', icon: <IconWrite size={24} />, label: '일기' },
     { href: '/dashboard/chat', icon: <IconChat size={24} />, label: '상담' },
     { href: '/dashboard/favorites', icon: <IconHeart size={24} />, label: '하트' },
     { href: '/dashboard/profile', icon: <IconProfile size={24} />, label: '내 프로필' },
