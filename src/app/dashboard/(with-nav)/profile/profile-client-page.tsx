@@ -58,11 +58,10 @@ export default function ProfileClientPage({
     nickname: initialProfile.nickname || '',
     phone: initialProfile.phoneNumber || '',
     birthday: initialProfile.birthDate
-      ? new Date(initialProfile.birthDate).toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        })
+      ? (() => {
+          const d = new Date(initialProfile.birthDate);
+          return `${d.getFullYear()}. ${String(d.getMonth() + 1).padStart(2, '0')}. ${String(d.getDate()).padStart(2, '0')}`;
+        })()
       : '',
     job: initialProfile.job || '',
   });
@@ -77,9 +76,83 @@ export default function ProfileClientPage({
   const [showExportModal, setShowExportModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const formatPhoneNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length > 3 && cleaned.length <= 7) {
+      return `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+    } else if (cleaned.length > 7) {
+      return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+    }
+    return cleaned;
+  };
+
+  const formatBirthDate = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length > 4 && cleaned.length <= 6) {
+      return `${cleaned.slice(0, 4)}. ${cleaned.slice(4)}`;
+    } else if (cleaned.length > 6) {
+      return `${cleaned.slice(0, 4)}. ${cleaned.slice(4, 6)}. ${cleaned.slice(6, 8)}`;
+    }
+    return cleaned;
+  };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    let newValue = value;
+    if (field === 'phone') {
+      newValue = formatPhoneNumber(value);
+    } else if (field === 'birthday') {
+      newValue = formatBirthDate(value);
+    }
+
+    setFormData((prev) => ({ ...prev, [field]: newValue }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    if (!formData.name) {
+      newErrors.name = '이름을 입력해주세요';
+      isValid = false;
+    }
+
+    if (!formData.nickname) {
+      newErrors.nickname = '닉네임을 입력해주세요';
+      isValid = false;
+    } else if (formData.nickname.length < 2) {
+      newErrors.nickname = '닉네임은 2자 이상이어야 합니다';
+      isValid = false;
+    }
+
+    if (!formData.phone) {
+      newErrors.phone = '전화번호를 입력해주세요';
+      isValid = false;
+    } else if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+      newErrors.phone = '올바른 형식으로 입력해주세요 (예: 010-1234-5678)';
+      isValid = false;
+    }
+
+    if (!formData.birthday) {
+      newErrors.birthday = '생년월일을 입력해주세요';
+      isValid = false;
+    } else if (!/^\d{4}\.\s?\d{2}\.\s?\d{2}$/.test(formData.birthday)) {
+      newErrors.birthday = '올바른 형식으로 입력해주세요 (예: 2000. 01. 01)';
+      isValid = false;
+    }
+
+    if (!formData.job) {
+      newErrors.job = '직업을 입력해주세요';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const showModal = (
@@ -92,6 +165,11 @@ export default function ProfileClientPage({
 
   // 프로필 데이터 저장
   const handleSaveProfile = async () => {
+    if (!validateForm()) {
+      showModal('입력 확인', '입력된 정보를 다시 확인해주세요.', 'error');
+      return;
+    }
+
     try {
       // 생년월일 포맷 변환 (YYYY. MM. DD -> YYYY-MM-DD)
       let birthDateISO = null;
@@ -198,11 +276,10 @@ export default function ProfileClientPage({
               nickname: profile.nickname || '',
               phone: profile.phoneNumber || '', // exportData 키와 일치시킴
               birthday: profile.birthDate
-                ? new Date(profile.birthDate).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })
+                ? (() => {
+                    const d = new Date(profile.birthDate);
+                    return `${d.getFullYear()}. ${String(d.getMonth() + 1).padStart(2, '0')}. ${String(d.getDate()).padStart(2, '0')}`;
+                  })()
                 : '',
               job: profile.job || '',
             });
@@ -289,7 +366,12 @@ export default function ProfileClientPage({
         <AIStyleSelector value={aiStyle} onChange={setAiStyle} />
 
         {/* 내 정보 */}
-        <ProfileForm formData={formData} onChange={handleInputChange} onSave={handleSaveProfile} />
+        <ProfileForm
+          formData={formData}
+          onChange={handleInputChange}
+          onSave={handleSaveProfile}
+          errors={errors}
+        />
 
         {/* 사용 통계 */}
         <UsageStats stats={usageStats} />

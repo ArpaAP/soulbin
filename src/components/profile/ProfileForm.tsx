@@ -13,9 +13,10 @@ interface ProfileFormProps {
   formData: ProfileFormData;
   onChange: (field: string, value: string) => void;
   onSave: () => void;
+  errors?: Record<string, string>;
 }
 
-export default function ProfileForm({ formData, onChange, onSave }: ProfileFormProps) {
+export default function ProfileForm({ formData, onChange, onSave, errors = {} }: ProfileFormProps) {
   return (
     <div className="gap-g6 p-g4 rounded-br3 relative box-border flex w-full shrink-0 flex-col content-stretch items-start overflow-clip bg-white">
       <p className="text-h6 relative shrink-0 font-semibold text-nowrap whitespace-pre text-black not-italic">
@@ -26,26 +27,33 @@ export default function ProfileForm({ formData, onChange, onSave }: ProfileFormP
           label="이름"
           value={formData.name}
           onChange={(value) => onChange('name', value)}
+          error={errors.name}
         />
         <OutlinedInput
           label="닉네임"
           value={formData.nickname}
           onChange={(value) => onChange('nickname', value)}
+          error={errors.nickname}
         />
         <OutlinedInput
           label="전화번호"
           value={formData.phone}
           onChange={(value) => onChange('phone', value)}
+          error={errors.phone}
+          placeholder="010-1234-5678"
         />
         <OutlinedInput
           label="생년월일"
           value={formData.birthday}
           onChange={(value) => onChange('birthday', value)}
+          error={errors.birthday}
+          placeholder="YYYY. MM. DD"
         />
         <OutlinedInput
           label="직업"
           value={formData.job}
           onChange={(value) => onChange('job', value)}
+          error={errors.job}
         />
       </div>
       <div className="gap-g2 relative flex w-full shrink-0 content-stretch items-center justify-center">
