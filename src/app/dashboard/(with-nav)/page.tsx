@@ -1,6 +1,7 @@
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
 
 import TossFaceIcon from '@/components/TossFaceIcon';
+import GreetingCard from '@/components/dashboard/GreetingCard';
 
 import { IconX } from '@/icons';
 import { auth } from '@/lib/auth';
@@ -142,31 +143,6 @@ export default async function DashboardPage() {
 
   const mostFrequentEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
 
-  const currentDate = new Date();
-  const dateString = currentDate.toLocaleDateString('ko-KR', {
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long',
-  });
-
-  const greetingEmoji = () => {
-    const hour = currentDate.getHours();
-    if (hour < 6) return '🌙';
-    if (hour < 12) return '🌅';
-    if (hour < 18) return '☀️';
-    if (hour < 22) return '🌆';
-    return '🌙';
-  };
-
-  const greeting = () => {
-    const hour = currentDate.getHours();
-    if (hour < 6) return '늦은 밤이에요';
-    if (hour < 12) return '좋은 아침이에요';
-    if (hour < 18) return '좋은 오후에요';
-    if (hour < 22) return '좋은 저녁이에요';
-    return '늦은 밤이에요';
-  };
-
   return (
     <div className="bg-bg relative min-h-screen w-full">
       {/* GNB */}
@@ -179,19 +155,7 @@ export default async function DashboardPage() {
       {/* Contents */}
       <div className="gap-g2 px-g3 py-g0 mx-auto box-border flex w-full max-w-[430px] flex-col content-stretch items-start overflow-clip">
         {/* 인사 카드 */}
-        <div className="bg-dashboard-nav-bg gap-g3 p-g4 rounded-br3 relative box-border flex w-full shrink-0 content-stretch items-center overflow-clip">
-          <TossFaceIcon emoji={greetingEmoji()} />
-          <div className="gap-g0 p-g0 relative box-border flex shrink-0 flex-col content-stretch items-start leading-0 not-italic">
-            <div className="text-black-100 relative flex w-full shrink-0 flex-col justify-center text-[18px] font-semibold tracking-[-0.45px]">
-              <p className="leading-[26px]">
-                {greeting()}, {session.user.name}님
-              </p>
-            </div>
-            <div className="text-grey-300 relative flex w-full shrink-0 flex-col justify-center text-[14px] font-normal tracking-[-0.35px]">
-              <p className="leading-[22px]">{dateString}</p>
-            </div>
-          </div>
-        </div>
+        <GreetingCard userName={session.user.name} />
 
         {/* 오늘의 마음가짐 카드 */}
         <div className="gap-g3 p-g4 rounded-br3 relative box-border flex w-full shrink-0 flex-col content-stretch items-start justify-center overflow-clip bg-white">
