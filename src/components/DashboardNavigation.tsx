@@ -39,7 +39,7 @@ export function DashboardNavigation() {
   const pathname = usePathname();
 
   return (
-    <div className="bg-dashboard-nav-bg border-dashboard-nav-border rounded-tl-br5 rounded-tr-br5 fixed bottom-0 left-1/2 z-50 w-full max-w-[430px] translate-x-[-50%] border-[1px_1px_0px] border-solid">
+    <div className="bg-dashboard-nav-bg border-dashboard-nav-border rounded-tl-br5 rounded-tr-br5 fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] translate-x-[-50%] border-[1px_1px_0px] border-solid">
       <div className="relative box-border flex w-full content-stretch items-start gap-[10px] overflow-clip rounded-[inherit] pb-2">
         <nav className="px-g4 py-g0 relative box-border flex h-[56px] min-h-px min-w-px shrink-0 grow basis-0 content-stretch items-center justify-between overflow-clip">
           <NavButton
