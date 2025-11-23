@@ -24,3 +24,24 @@ export async function saveDiary(content: string) {
   revalidatePath('/dashboard/diary');
   revalidatePath('/dashboard/diary/list');
 }
+
+export async function getDiaries() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    return [];
+  }
+
+  const diaries = await prisma.diary.findMany({
+    where: {
+      userId: session.user.id,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  return diaries;
+}

@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Textarea } from '@/components/ui/textarea';
 
 import { Button } from './ui/button';
-import { saveDiary } from '@/app/dashboard/(with-nav)/diary/actions';
+import { saveDiary } from '@/actions/diary';
 import { IconWrite } from '@/icons';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
