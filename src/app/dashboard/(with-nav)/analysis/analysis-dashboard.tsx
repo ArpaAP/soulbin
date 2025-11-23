@@ -104,7 +104,7 @@ export function AnalysisDashboard({ data }: { data: AnalysisData }) {
         <ChartContainer
           id="chart-pie"
           config={dynamicChartConfig}
-          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[230px] w-full pb-0"
+          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square w-2/3 pb-0"
         >
           <PieChart margin={{ top: 24, right: 0, bottom: 24, left: 0 }}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
