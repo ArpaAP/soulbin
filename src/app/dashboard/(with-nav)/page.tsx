@@ -1,3 +1,5 @@
+import { startOfDay, endOfDay, subDays, format } from 'date-fns';
+
 import TossFaceIcon from '@/components/TossFaceIcon';
 
 import { IconX } from '@/icons';
@@ -6,6 +8,29 @@ import prisma from '@/lib/prisma';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+
+const EMOTION_EMOJI_MAP: Record<string, string> = {
+  기쁨: '🥰',
+  행복: '🥰',
+  즐거움: '😆',
+  설렘: '💓',
+  슬픔: '😢',
+  우울: '🌧️',
+  분노: '😡',
+  화남: '🔥',
+  불안: '😨',
+  걱정: '😟',
+  평온: '😌',
+  편안: '🍃',
+  놀람: '😲',
+  당황: '💦',
+  지루함: '🥱',
+  무기력: '🫠',
+};
+
+function getEmotionEmoji(emotion: string) {
+  return EMOTION_EMOJI_MAP[emotion] || '😐';
+}
 
 function GrayIcon() {
   return (
@@ -55,6 +80,68 @@ export default async function DashboardPage() {
     redirect('/register');
   }
 
+  // Data Fetching
+  const todayStart = startOfDay(new Date());
+  const todayEnd = endOfDay(new Date());
+  const weekStart = subDays(new Date(), 7);
+
+  const [todayDiary, weeklyDiaries, recentDiaries] = await Promise.all([
+    prisma.diary.findFirst({
+      where: {
+        userId: session.user.id,
+        createdAt: {
+          gte: todayStart,
+          lte: todayEnd,
+        },
+      },
+      include: { analysis: true },
+    }),
+    prisma.diary.findMany({
+      where: {
+        userId: session.user.id,
+        createdAt: {
+          gte: weekStart,
+        },
+        analysis: {
+          isNot: null,
+        },
+      },
+      select: {
+        analysis: {
+          select: {
+            emotion: true,
+          },
+        },
+      },
+    }),
+    prisma.diary.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 3,
+      include: {
+        analysis: true,
+      },
+    }),
+  ]);
+
+  // Weekly Summary Calculation
+  const emotionCounts = weeklyDiaries.reduce(
+    (acc, curr) => {
+      const emotion = curr.analysis?.emotion;
+      if (emotion) {
+        acc[emotion] = (acc[emotion] || 0) + 1;
+      }
+      return acc;
+    },
+    {} as Record<string, number>
+  );
+
+  const mostFrequentEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+
   const currentDate = new Date();
   const dateString = currentDate.toLocaleDateString('ko-KR', {
     month: 'long',
@@ -83,7 +170,7 @@ export default async function DashboardPage() {
   return (
     <div className="bg-bg relative min-h-screen w-full">
       {/* GNB */}
-      <div className="bg-bg px-g5 mx-auto mt-2 box-border flex h-[56px] w-full max-w-[430px] content-stretch items-center gap-[10px] overflow-clip py-[10px]">
+      <div className="bg-bg px-g5 mx-auto mt-2 box-border flex h-14 w-full max-w-[430px] content-stretch items-center gap-2.5 overflow-clip py-2.5">
         <p className="text-black-200 relative shrink-0 text-center text-[20px] leading-[28px] font-semibold tracking-[-0.5px] text-nowrap whitespace-pre not-italic">
           SoulBin
         </p>
@@ -94,7 +181,7 @@ export default async function DashboardPage() {
         {/* 인사 카드 */}
         <div className="bg-dashboard-nav-bg gap-g3 p-g4 rounded-br3 relative box-border flex w-full shrink-0 content-stretch items-center overflow-clip">
           <TossFaceIcon emoji={greetingEmoji()} />
-          <div className="gap-g0 p-g0 relative box-border flex shrink-0 flex-col content-stretch items-start leading-[0] not-italic">
+          <div className="gap-g0 p-g0 relative box-border flex shrink-0 flex-col content-stretch items-start leading-0 not-italic">
             <div className="text-black-100 relative flex w-full shrink-0 flex-col justify-center text-[18px] font-semibold tracking-[-0.45px]">
               <p className="leading-[26px]">{greeting()}</p>
             </div>
@@ -144,12 +231,25 @@ export default async function DashboardPage() {
           <p className="relative shrink-0 text-[18px] leading-[26px] font-semibold tracking-[-0.45px] text-nowrap whitespace-pre text-black not-italic">
             오늘의 감정
           </p>
-          <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-[10px]">
-            <GrayIcon />
-            <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
-              아직 오늘의 감정을 기록하지 않았어요
-            </p>
-          </div>
+          {todayDiary?.analysis ? (
+            <div className="flex w-full items-center gap-4">
+              <TossFaceIcon emoji={getEmotionEmoji(todayDiary.analysis.emotion)} size={48} />
+              <div className="flex flex-col gap-1">
+                <p className="text-b1 text-black-100 font-medium">
+                  오늘의 감정은{' '}
+                  <span className="text-primary-green">{todayDiary.analysis.emotion}</span>이에요
+                </p>
+                <p className="text-b3 text-grey-300 line-clamp-1">{todayDiary.analysis.summary}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-2.5">
+              <GrayIcon />
+              <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
+                아직 오늘의 감정을 기록하지 않았어요
+              </p>
+            </div>
+          )}
         </div>
 
         {/* 이번 주 요약 카드 */}
@@ -157,12 +257,27 @@ export default async function DashboardPage() {
           <p className="relative shrink-0 text-[18px] leading-[26px] font-semibold tracking-[-0.45px] text-nowrap whitespace-pre text-black not-italic">
             이번 주 요약
           </p>
-          <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-[10px]">
-            <GrayIcon />
-            <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
-              감정 기록을 시작해볼까요?
-            </p>
-          </div>
+          {mostFrequentEmotion ? (
+            <div className="flex w-full items-center gap-4">
+              <TossFaceIcon emoji={getEmotionEmoji(mostFrequentEmotion)} size={48} />
+              <div className="flex flex-col gap-1">
+                <p className="text-b1 text-black-100 font-medium">
+                  이번 주는 <span className="text-primary-green">{mostFrequentEmotion}</span>을 가장
+                  많이 느꼈어요
+                </p>
+                <p className="text-b3 text-grey-300">
+                  총 {weeklyDiaries.length}개의 감정을 기록했어요
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-2.5">
+              <GrayIcon />
+              <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
+                감정 기록을 시작해볼까요?
+              </p>
+            </div>
+          )}
         </div>
 
         {/* 최근 일기 기록 카드 */}
@@ -170,12 +285,44 @@ export default async function DashboardPage() {
           <p className="relative shrink-0 text-[18px] leading-[26px] font-semibold tracking-[-0.45px] text-nowrap whitespace-pre text-black not-italic">
             최근 일기 기록
           </p>
-          <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-[10px]">
-            <GrayIcon />
-            <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
-              아직 기록이 없어요
-            </p>
-          </div>
+          {recentDiaries.length > 0 ? (
+            <div className="gap-g2 flex w-full flex-col">
+              {recentDiaries.map((diary) => (
+                <Link
+                  href="/dashboard/diary/list"
+                  key={diary.id}
+                  className="rounded-br3 p-g3 flex w-full items-center justify-between border border-gray-100 bg-white transition-colors hover:bg-gray-50"
+                >
+                  <div className="gap-g3 flex items-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50">
+                      <TossFaceIcon
+                        emoji={getEmotionEmoji(diary.analysis?.emotion || '평온')}
+                        size={24}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-b2 text-black-100 font-medium">
+                        {diary.analysis?.emotion || '분석 중'}
+                      </p>
+                      <p className="text-c1 text-grey-300 line-clamp-1 max-w-[200px]">
+                        {diary.analysis?.summary || diary.content}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-c2 text-grey-200 whitespace-nowrap">
+                    {format(diary.createdAt, 'M.d')}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="relative flex h-[100px] w-full shrink-0 flex-col content-stretch items-center justify-center gap-2.5">
+              <GrayIcon />
+              <p className="text-grey-300 relative shrink-0 text-[14px] leading-[22px] font-normal tracking-[-0.35px] text-nowrap whitespace-pre not-italic">
+                아직 기록이 없어요
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
