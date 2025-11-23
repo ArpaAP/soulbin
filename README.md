@@ -17,7 +17,7 @@
 
 ## 시연 영상
 
-https://www.youtube.com/shorts/wgDE258V5lw
+[![Video Label](http://img.youtube.com/vi/wgDE258V5lw/0.jpg)](https://www.youtube.com/shorts/wgDE258V5lw)
 
 ## 서비스 소개
 
