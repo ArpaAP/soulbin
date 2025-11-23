@@ -183,7 +183,9 @@ export default async function DashboardPage() {
           <TossFaceIcon emoji={greetingEmoji()} />
           <div className="gap-g0 p-g0 relative box-border flex shrink-0 flex-col content-stretch items-start leading-0 not-italic">
             <div className="text-black-100 relative flex w-full shrink-0 flex-col justify-center text-[18px] font-semibold tracking-[-0.45px]">
-              <p className="leading-[26px]">{greeting()}</p>
+              <p className="leading-[26px]">
+                {greeting()}, {session.user.name}님
+              </p>
             </div>
             <div className="text-grey-300 relative flex w-full shrink-0 flex-col justify-center text-[14px] font-normal tracking-[-0.35px]">
               <p className="leading-[22px]">{dateString}</p>

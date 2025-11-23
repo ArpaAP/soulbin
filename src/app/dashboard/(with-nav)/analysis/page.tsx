@@ -37,7 +37,7 @@ export default async function AnalysisPage() {
     return (
       <div className="bg-background flex h-full w-full flex-col">
         {/* Header */}
-        <div className="px-g5 flex h-14 w-full items-center justify-start py-2.5">
+        <div className="px-g5 pt-g4 flex h-14 w-full items-center justify-start">
           <h1 className="text-h5 text-black-200">분석</h1>
         </div>
 
@@ -156,7 +156,7 @@ export default async function AnalysisPage() {
   return (
     <div className="bg-background flex h-full w-full flex-col">
       {/* Header */}
-      <div className="px-g5 flex h-14 w-full items-center justify-start py-2.5">
+      <div className="px-g5 pt-g4 flex h-14 w-full items-center justify-start">
         <h1 className="text-h5 text-black-200">분석</h1>
       </div>
 

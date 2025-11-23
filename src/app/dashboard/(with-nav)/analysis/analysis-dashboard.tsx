@@ -61,7 +61,7 @@ export function AnalysisDashboard({ data }: { data: AnalysisData }) {
   }, [data]);
 
   return (
-    <div className="gap-g2 px-g3 pb-g3 flex flex-col">
+    <div className="gap-g2 px-g3 py-g2 flex flex-col">
       {/* Summary Cards */}
       <div className="gap-g2 flex">
         <div className="gap-g4 rounded-br3 p-g4 flex flex-1 items-center bg-white">

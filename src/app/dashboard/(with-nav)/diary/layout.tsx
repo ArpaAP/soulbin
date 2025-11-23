@@ -49,13 +49,15 @@ function DiaryTabMenu() {
 
 export default function DiaryLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="gap-g2 px-g3 relative flex w-full flex-col items-start py-0">
+    <div className="px-g3 py-g2 relative flex w-full flex-col items-start">
       {/* Header */}
-      <div className="pt-g2 px-g2 relative flex h-14 w-full shrink-0 items-center justify-start">
+      <div className="px-g2 relative flex h-14 w-full shrink-0 items-center justify-start">
         <p className="text-h5 font-semibold tracking-[-0.5px] text-black">일기</p>
       </div>
 
-      <DiaryTabMenu />
+      <div className="pb-g2 w-full">
+        <DiaryTabMenu />
+      </div>
 
       {children}
     </div>
