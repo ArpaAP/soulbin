@@ -4,6 +4,7 @@ import { IconX } from '@/icons';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { headers } from 'next/headers';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 function GrayIcon() {
@@ -121,12 +122,15 @@ export default async function DashboardPage() {
 
         {/* 일기 쓰기 / AI 챗봇 상담 버튼 */}
         <div className="gap-g2 relative flex w-full shrink-0 content-stretch items-start">
-          <div className="bg-white-100 gap-g2 px-g4 py-g5 rounded-br3 relative box-border flex min-h-px min-w-px shrink-0 grow basis-0 flex-col content-stretch items-center justify-center overflow-clip">
+          <Link
+            href="/dashboard/diary/write"
+            className="bg-white-100 gap-g2 px-g4 py-g5 rounded-br3 relative box-border flex min-h-px min-w-px shrink-0 grow basis-0 flex-col content-stretch items-center justify-center overflow-clip"
+          >
             <TossFaceIcon emoji="✍️" size={24} />
             <p className="relative shrink-0 text-[16px] leading-[20px] font-medium tracking-[-0.32px] text-nowrap whitespace-pre text-black not-italic">
               일기 쓰기
             </p>
-          </div>
+          </Link>
           <div className="bg-white-100 gap-g2 px-g4 py-g5 rounded-br3 relative box-border flex min-h-px min-w-px shrink-0 grow basis-0 flex-col content-stretch items-center justify-center overflow-clip">
             <TossFaceIcon emoji="💬" size={24} />
             <p className="relative shrink-0 text-[16px] leading-[20px] font-medium tracking-[-0.32px] text-nowrap whitespace-pre text-black not-italic">
