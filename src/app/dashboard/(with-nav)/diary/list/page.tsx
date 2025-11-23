@@ -1,3 +1,4 @@
+import TossFaceIcon from '@/components/TossFaceIcon';
 import { DiaryCard } from '@/components/diary-card';
 
 import { getDiaries } from '@/actions/diary';
@@ -10,8 +11,11 @@ export default async function DiaryListPage() {
       {/* Diary List */}
       <div className="flex max-h-[614px] w-full flex-col gap-[10px] overflow-y-auto">
         {diaries.length === 0 ? (
-          <div className="flex items-center justify-center py-10">
-            <p className="text-grey-300">작성된 일기가 없습니다.</p>
+          <div className="gap-g4 flex flex-col items-center justify-center pt-24">
+            <TossFaceIcon emoji="📝" size={72} />
+
+            <p className="text-h6">아직 일기가 없어요</p>
+            <p className="text-grey-300 text-b2">첫 번째 감정 일기를 작성해보세요</p>
           </div>
         ) : (
           diaries.map((diary) => (
