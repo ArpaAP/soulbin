@@ -19,6 +19,7 @@ export default async function DiaryListPage() {
               key={diary.id}
               id={diary.id}
               content={diary.content}
+              analysisStatus={diary.analysisStatus}
               analysis={diary.analysis}
               createdAt={diary.createdAt}
             />

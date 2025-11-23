@@ -19,6 +19,7 @@ import { ko } from 'date-fns/locale';
 type DiaryCardProps = {
   id: string;
   content: string;
+  analysisStatus: 'PENDING' | 'COMPLETED' | 'FAILED';
   analysis: {
     emotion: string;
     intensity: number;
@@ -29,7 +30,7 @@ type DiaryCardProps = {
   createdAt: Date;
 };
 
-export function DiaryCard({ id, content, analysis, createdAt }: DiaryCardProps) {
+export function DiaryCard({ id, content, analysisStatus, analysis, createdAt }: DiaryCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const formattedDate = format(createdAt, 'M월 d일 HH:mm', { locale: ko });
@@ -81,15 +82,21 @@ export function DiaryCard({ id, content, analysis, createdAt }: DiaryCardProps) 
         ) : null}
 
         {/* AI Analysis */}
-        {analysis?.advice && (
-          <div className="p-g4 rounded-br2 box-border flex w-full flex-col gap-[10px] bg-[#f8f9fb]">
-            <div className="gap-g1 flex items-center">
-              <span className="tossface text-[20px]">⚡</span>
-              <p className="text-l2 text-black">AI 조언</p>
-            </div>
-            <p className="text-b2 text-[#464646]">{analysis.advice}</p>
+        <div className="p-g4 rounded-br2 box-border flex w-full flex-col gap-[10px] bg-[#f8f9fb]">
+          <div className="gap-g1 flex items-center">
+            <span className="tossface text-[20px]">⚡</span>
+            <p className="text-l2 text-black">AI 조언</p>
           </div>
-        )}
+          {analysisStatus === 'PENDING' && (
+            <p className="text-b2 text-[#464646]">AI 분석 중입니다... 잠시 뒤에 확인해주세요.</p>
+          )}
+          {analysisStatus === 'FAILED' && (
+            <p className="text-b2 text-[#464646]">AI 분석에 실패했습니다.</p>
+          )}
+          {analysisStatus === 'COMPLETED' && (
+            <p className="text-b2 text-[#464646]">{analysis?.advice}</p>
+          )}
+        </div>
 
         {/* Delete Button */}
         <Button

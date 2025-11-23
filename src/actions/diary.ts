@@ -22,6 +22,7 @@ export async function saveDiary(content: string) {
     data: {
       content,
       userId: session.user.id,
+      analysisStatus: 'PENDING',
     },
   });
 
@@ -49,10 +50,20 @@ export async function saveDiary(content: string) {
           advice: analysisResult.advice,
         },
       });
+
+      // 5. 일기 상태 업데이트
+      await prisma.diary.update({
+        where: { id: diary.id },
+        data: { analysisStatus: 'COMPLETED' },
+      });
     } catch (error) {
       console.error('Diary analysis failed:', error);
       // 분석 실패해도 일기는 저장되었으므로 에러를 throw하지 않음
       // 추후 재시도 로직이나 실패 상태 표시 등을 고려할 수 있음
+      await prisma.diary.update({
+        where: { id: diary.id },
+        data: { analysisStatus: 'FAILED' },
+      });
     }
   });
 

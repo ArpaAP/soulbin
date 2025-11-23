@@ -51,7 +51,8 @@ model Diary {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Optional fields for future AI analysis features
-  analysis DiaryAnalysis?
+  analysis       DiaryAnalysis?
+  analysisStatus AnalysisStatus @default(PENDING)
 
   @@index([userId])
   @@map("diary")
@@ -64,17 +65,16 @@ enum AnalysisStatus {
 }
 
 model DiaryAnalysis {
-  id        String         @id @default(cuid())
-  diaryId   String         @unique
-  status    AnalysisStatus @default(PENDING)
+  id        String   @id @default(cuid())
+  diaryId   String   @unique
   emotion   String
   intensity Int
   tags      String[]
   summary   String
   advice    String?
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  diary     Diary          @relation(fields: [diaryId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  diary     Diary    @relation(fields: [diaryId], references: [id], onDelete: Cascade)
 
   @@map("diary_analysis")
 }
