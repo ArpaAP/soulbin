@@ -58,7 +58,7 @@ export function DashboardNavigation() {
             href="/dashboard/chat"
             icon={<IconChat size={24} />}
             label="상담"
-            isSelected={pathname == '/dashboard/chat'}
+            isSelected={pathname.startsWith('/dashboard/chat')}
           />
           <NavButton
             href="/dashboard/analysis"
