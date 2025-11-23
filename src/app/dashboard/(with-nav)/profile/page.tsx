@@ -177,18 +177,26 @@ export default function ProfilePage() {
   };
 
   // 실제 데이터 내보내기 실행
-  const executeExportData = () => {
+  const executeExportData = async () => {
     try {
-      const allData = {
+      const allData = await getAllUserData();
+
+      const exportData = {
         profile: {
-          ...formData,
-          email,
-          aiStyle,
+          name: allData.name,
+          nickname: allData.nickname,
+          phoneNumber: allData.phoneNumber,
+          birthDate: allData.birthDate,
+          job: allData.job,
+          email: allData.email,
+          aiStyle: allData.aiStyle,
         },
+        diaries: allData.diaries,
+        chats: allData.chats,
         exportDate: new Date().toISOString(),
       };
 
-      const blob = new Blob([JSON.stringify(allData, null, 2)], {
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
         type: 'application/json',
       });
       const url = URL.createObjectURL(blob);
@@ -216,26 +224,42 @@ export default function ProfilePage() {
   // 데이터 가져오기 (JSON 업로드)
   const handleImportData = (file: File) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         const result = e.target?.result;
         if (typeof result === 'string') {
           const importedData = JSON.parse(result);
 
+          // 서버 액션을 통해 데이터 복원
+          await restoreUserData(importedData);
+
+          // UI 업데이트 (프로필 정보)
           if (importedData.profile) {
             const profile = importedData.profile;
             setFormData({
               name: profile.name || '',
               nickname: profile.nickname || '',
-              phone: profile.phone || '',
-              birthday: profile.birthday || '',
+              phone: profile.phoneNumber || '', // exportData 키와 일치시킴
+              birthday: profile.birthDate
+                ? new Date(profile.birthDate).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })
+                : '',
               job: profile.job || '',
             });
             setEmail(profile.email || '');
-            setAiStyle(profile.aiStyle || 'auto');
-
-            showModal('가져오기 완료', '데이터를 성공적으로 가져왔습니다!', 'success');
+            setAiStyle(
+              (profile.aiStyle as string)?.toLowerCase() as AIStyle || 'auto'
+            );
           }
+
+          showModal(
+            '가져오기 완료',
+            '데이터를 성공적으로 가져왔습니다!',
+            'success'
+          );
         }
       } catch (error) {
         console.error('Failed to import data:', error);
