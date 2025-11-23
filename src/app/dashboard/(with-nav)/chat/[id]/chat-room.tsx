@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { ChatInput } from './chat-input';
 import { MessageBubble } from './message-bubble';
-import { saveMessage } from '@/actions/chat';
+import { saveMessage, generateAIResponse } from '@/actions/chat';
 import { MessageRole } from '@/generated/prisma/enums';
 
 interface Message {
@@ -49,27 +49,25 @@ export function ChatRoom({ chatId, initialMessages }: ChatRoomProps) {
       // Save user message
       await saveMessage(chatId, content, 'USER');
 
-      // TODO: Call AI API and get response
-      // For now, simulate AI response
-      setTimeout(async () => {
-        const aiContent = '죄송합니다. 아직 AI 응답 기능이 연동되지 않았습니다.';
-        await saveMessage(chatId, aiContent, 'ASSISTANT');
+      // Call AI API and get response
+      const aiMessage = await generateAIResponse(chatId);
 
+      if (aiMessage) {
         setMessages((prev) => [
           ...prev,
           {
-            id: (Date.now() + 1).toString(),
-            content: aiContent,
+            id: aiMessage.id,
+            content: aiMessage.content,
             role: 'ASSISTANT',
-            createdAt: new Date(),
+            createdAt: aiMessage.createdAt,
           },
         ]);
-        setIsPending(false);
-      }, 1000);
+      }
     } catch (error) {
       console.error('Failed to send message:', error);
       // Revert optimistic update on error
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
+    } finally {
       setIsPending(false);
     }
   };

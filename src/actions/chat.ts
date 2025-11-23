@@ -1,5 +1,6 @@
 'use server';
 
+import { processChatAction } from './openai';
 import { MessageRole } from '@/generated/prisma/enums';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
@@ -178,5 +179,46 @@ export async function saveMessage(chatId: string, content: string, role: Message
   } catch (error) {
     console.error('Failed to save message:', error);
     throw new Error('Failed to save message');
+  }
+}
+
+/**
+ * Generate AI response and save it
+ */
+export async function generateAIResponse(chatId: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    // Generate AI response
+    const aiContent = await processChatAction(chatId);
+
+    // Save AI message
+    const message = await prisma.message.create({
+      data: {
+        chatId,
+        content: aiContent,
+        role: 'ASSISTANT',
+      },
+    });
+
+    // Update chat's updatedAt timestamp
+    await prisma.chat.update({
+      where: { id: chatId },
+      data: { updatedAt: new Date() },
+    });
+
+    revalidatePath(`/dashboard/chat/${chatId}`);
+    revalidatePath('/dashboard/chat');
+
+    return message;
+  } catch (error) {
+    console.error('Failed to generate AI response:', error);
+    throw new Error('Failed to generate AI response');
   }
 }

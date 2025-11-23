@@ -10,7 +10,7 @@ export default async function ChatPage() {
   return (
     <div className="bg-bg flex h-full min-h-screen flex-col">
       {/* Header */}
-      <div className="px-g5 flex h-14 items-center justify-center py-2.5">
+      <div className="px-g5 pt-g4 flex h-14 items-center justify-start">
         <h1 className="text-h5 text-black-200">상담 목록</h1>
       </div>
 

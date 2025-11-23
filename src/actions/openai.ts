@@ -3,6 +3,8 @@
 import { z } from 'zod';
 
 import { AIStyle } from '@/generated/prisma/enums';
+import prisma from '@/lib/prisma';
+import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
 import { StructuredOutputParser } from '@langchain/core/output_parsers';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { ChatOpenAI } from '@langchain/openai';
@@ -222,5 +224,47 @@ export async function generateDailyMindsetAction(emotionStats: {
   } catch (error) {
     console.error('오늘의 마음가짐 생성 실패:', error);
     return '오늘은 작은 것에 감사하는 하루를 보내보세요. 당신이 가진 것들에 집중하면 마음이 더 풍요로워질 거예요.';
+  }
+}
+
+/**
+ * 채팅 응답 생성 함수
+ */
+export async function processChatAction(chatId: string) {
+  if (!API_KEY) throw new Error('OpenAI API 키가 설정되지 않았습니다.');
+
+  // 1. 이전 대화 기록 조회 (최근 10개)
+  const recentMessages = await prisma.message.findMany({
+    where: { chatId },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+
+  // 시간순 정렬 및 메시지 객체 변환
+  const history = recentMessages.reverse().map((msg) =>
+    msg.role === 'USER' || msg.role === 'SYSTEM' // SYSTEM role handling might need adjustment if stored in DB
+      ? new HumanMessage(msg.content)
+      : new AIMessage(msg.content)
+  );
+
+  const model = createModel(0.7);
+
+  // 시스템 프롬프트 (기본 상담가 페르소나)
+  const systemPrompt = `당신은 공감 능력이 뛰어나고 전문적인 심리 상담 AI입니다.
+사용자의 이야기를 경청하고, 감정을 읽어주며, 적절한 위로와 조언을 제공해주세요.
+대화의 맥락을 파악하여 자연스럽게 대화를 이어나가세요.
+너무 길지 않게(3-5문장 내외) 답변하고, 따뜻하고 정중한 말투를 사용해주세요.`;
+
+  const messages = [new SystemMessage(systemPrompt), ...history];
+
+  try {
+    const response = await model.invoke(messages);
+    const aiContent =
+      typeof response.content === 'string' ? response.content : String(response.content);
+
+    return aiContent;
+  } catch (error) {
+    console.error('채팅 응답 생성 실패:', error);
+    return '죄송합니다. 잠시 후 다시 시도해주세요.';
   }
 }
